@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DB — Scroll Site</title>
+
+    <!-- Preload hero images -->
+    <link rel="preload" as="image" href="./dbai.png" media="(min-width: 769px)" />
+    <link rel="preload" as="image" href="./dbmobile.png" media="(max-width: 768px)" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Baloo+2:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            background: #000;
+            color: #fff;
+            font-family: 'Baloo 2', system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --hero-y: 30%;
+            --edge-gap: clamp(16px, 4vw, 28px);
+            --row-size: clamp(18px, 2.4vw, 28px);
+            --card-radius: 16px;
+
+            /* Pastel blue/purple theme */
+            --ink: #0c0d14;
+            --p-blue: #b9c8ff;
+            --p-blue-strong: #8fa6ff;
+            --p-purple: #e1ccff;
+            --p-purple-strong: #c19bff;
+            --chip: #14151c;
+            --border: rgba(189, 200, 255, .25);
+            --glow: 0 0 0 2px rgba(185, 200, 255, .18);
+            --surface: #0f1118;
+        }
+
+        /* ================= HERO ================= */
+        .hero {
+            position: relative;
+            min-height: 100svh;
+            background: center var(--hero-y)/cover no-repeat url("./dbai.png");
+            overflow: hidden;
+        }
+
+        @media (max-width:768px) {
+            :root {
+                --edge-gap: clamp(14px, 5vw, 24px);
+                --row-size: clamp(16px, 4.7vw, 20px);
+                --hero-y: 38%
+            }
+
+            .hero {
+                background-image: url("./dbmobile.png")
+            }
+        }
+
+        /* Brand / Logo */
+        .brand {
+            position: absolute;
+            top: max(var(--edge-gap), env(safe-area-inset-top));
+            left: max(var(--edge-gap), env(safe-area-inset-left));
+            z-index: 6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            text-decoration: none;
+            filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .55));
+        }
+
+        .brand img {
+            height: clamp(22px, 5vw, 40px);
+            display: block
+        }
+
+        .brand .wordmark {
+            display: none;
+            font-family: 'Permanent Marker', system-ui;
+            font-size: clamp(22px, 5vw, 40px);
+            letter-spacing: .02em;
+            text-shadow: 0 2px 0 rgba(0, 0, 0, .35), .5px .5px 0 var(--ink), -1px 0 0 var(--ink), 0 -1px 0 var(--ink), 1px 0 0 var(--ink);
+        }
+
+        .brand img[style*="display: none"]+.wordmark {
+            display: block
+        }
+
+        /* Bottom rails */
+        .bottom-row {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: max(var(--edge-gap), env(safe-area-inset-bottom));
+            padding: 0 var(--edge-gap);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: var(--row-size);
+            line-height: 1;
+            z-index: 2;
+        }
+
+        @media (max-width:768px) {
+            .bottom-row {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                align-items: end
+            }
+        }
+
+        /* Menu */
+        .menu-left {
+            display: flex;
+            gap: clamp(12px, 4.5vw, 36px);
+            font-family: 'Permanent Marker', system-ui;
+            text-transform: uppercase;
+            letter-spacing: .02em;
+            user-select: none;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .35);
+        }
+
+        .menu-left a {
+            color: #fff;
+            text-decoration: none;
+            padding: .15em .05em;
+            border-radius: .15em;
+            box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0);
+            transition: box-shadow .12s ease, transform .12s ease;
+        }
+
+        .menu-left a:hover {
+            box-shadow: inset 0 -6px 0 rgba(185, 200, 255, .35);
+            transform: translateY(-1px)
+        }
+
+        @media (max-width:768px) {
+            .menu-left {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start
+            }
+        }
+
+        /* Socials */
+        .socials {
+            display: flex;
+            gap: 16px;
+            align-items: center
+        }
+
+        .socials a {
+            display: inline-flex;
+            width: 1.35em;
+            height: 1.35em;
+            color: #fff;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .45));
+            opacity: .95;
+            transition: transform .12s ease, opacity .12s ease
+        }
+
+        .socials a:hover {
+            transform: scale(1.06);
+            opacity: 1
+        }
+
+        @media (max-width:768px) {
+            .socials {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 12px
+            }
+        }
+
+        .icon {
+            width: 100%;
+            height: 100%;
+            display: block
+        }
+
+        /* ================= SECTIONS ================= */
+        .section {
+            padding: 80px var(--edge-gap);
+            scroll-margin-top: 72px
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto
+        }
+
+        .section h2 {
+            margin: 0 0 16px;
+            text-align: center;
+            font-family: 'Permanent Marker', system-ui;
+            letter-spacing: .02em;
+            text-transform: uppercase;
+            font-size: clamp(28px, 6vw, 60px);
+            text-shadow: 0 3px 0 rgba(0, 0, 0, .45), 1px 0 0 var(--ink), -1px 0 0 var(--ink), 0 1px 0 var(--ink), 0 -1px 0 var(--ink);
+        }
+
+        /* Shows grid */
+        .shows-grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(3, minmax(0, 1fr))
+        }
+
+        @media (max-width:1100px) {
+            .shows-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+        }
+
+        @media (max-width:640px) {
+            .shows-grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .show-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, .45);
+        }
+
+        /* Skeleton + image handling */
+        .thumb-link {
+            display: block;
+            text-decoration: none;
+            color: inherit
+        }
+
+        .thumb-skeleton {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(90deg, #0f1118 0%, #171a22 48%, #0f1118 100%);
+            background-size: 200% 100%;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+
+        @media (max-width:640px) {
+            .thumb-skeleton {
+                aspect-ratio: 4/5
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                background-position: 200% 0
+            }
+
+            100% {
+                background-position: -200% 0
+            }
+        }
+
+        .show-thumb {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+            background: #111
+        }
+
+        /* keep aspect via container */
+
+        .show-body {
+            padding: 12px 14px 14px
+        }
+
+        .show-topline {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center
+        }
+
+        .badge {
+            background: #14151c;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 1;
+            box-shadow: var(--glow)
+        }
+
+        .show-title {
+            margin: 10px 0 4px;
+            font-family: 'Permanent Marker', system-ui;
+            letter-spacing: .02em;
+            text-transform: uppercase;
+            font-size: 26px;
+            line-height: 1
+        }
+
+        .show-meta {
+            opacity: .9;
+            font-size: 14px
+        }
+
+        .show-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        /* Buttons */
+        .btn {
+            --bg1: var(--p-blue);
+            --bg2: var(--p-purple);
+            color: #0e0b16;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            font-family: 'Permanent Marker', system-ui;
+            font-size: 18px;
+            letter-spacing: .02em;
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            border: 1px solid var(--border);
+            box-shadow: var(--glow), 0 10px 24px rgba(0, 0, 0, .35);
+            transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: var(--glow), 0 14px 28px rgba(0, 0, 0, .45)
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            filter: brightness(.98)
+        }
+
+        .btn.pink {
+            --bg1: var(--p-purple);
+            --bg2: var(--p-blue-strong);
+        }
+
+        /* Shop card */
+        .shop-card {
+            max-width: 560px;
+            margin: 0 auto
+        }
+
+        /* Contact block */
+        .contact-card {
+            background: linear-gradient(180deg, rgba(16, 18, 26, .72), rgba(16, 18, 26, .6));
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px 18px 12px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .45), var(--glow);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 28px 1fr;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 12px;
+            transition: background .12s ease
+        }
+
+        .row:hover {
+            background: rgba(185, 200, 255, .10)
+        }
+
+        .ico {
+            width: 20px;
+            height: 20px;
+            color: #dfe4ff;
+            opacity: .95
+        }
+
+        .row a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: .01em;
+            word-break: break-word
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <header class="hero" aria-label="Hero">
+        <a class="brand" href="#" aria-label="David Burrows — Home">
+            <img src="./db-logo.svg" alt="David Burrows logo"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span class="wordmark">DAVID&nbsp;BURROWS</span>
+        </a>
+
+        <div class="bottom-row">
+            <nav class="menu-left" aria-label="Primary links">
+                <a href="#shows">Shows</a>
+                <a href="#shop">Shop</a>
+                <a href="#contact">Contact</a>
+            </nav>
+
+            <div class="socials" aria-label="Social links">
+                <a href="https://www.instagram.com/dbcomedy14/" target="_blank" rel="noopener" aria-label="Instagram">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <circle cx="18" cy="6" r="1"></circle>
+                    </svg>
+                </a>
+                <a href="https://www.tiktok.com/@dbcomedy14?_t=ZT-8yjyCl2pKnu&_r=1" target="_blank" rel="noopener"
+                    aria-label="TikTok">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path
+                            d="M12.8 3a6.6 6.6 0 0 0 4.9 2.1V8A9.3 9.3 0 0 1 14 6.7v6.7a5.4 5.4 0 1 1-5.4-5.4c.3 0 .7 0 1 .1V10a2.9 2.9 0 1 0 2 2.7V3h1.2Z" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- SHOWS -->
+    <section id="shows" class="section">
+        <div class="container">
+            <h2>Shows</h2>
+            <div id="showsGrid" class="shows-grid" aria-live="polite"></div>
+        </div>
+    </section>
+
+    <!-- SHOP -->
+    <section id="shop" class="section">
+        <div class="container">
+            <h2>Shop</h2>
+            <article class="show-card shop-card">
+                <a class="thumb-link" href="https://www.instagram.com/dbcomedy14/" target="_blank" rel="noopener"
+                    aria-label="Shop teaser">
+                    <div class="thumb-skeleton" aria-hidden="true"></div>
+                </a>
+                <div class="show-body">
+                    <div class="show-title">Coming Soon</div>
+                    <div class="show-meta">Merch and more on the way. Follow on Instagram for updates.</div>
+                    <div class="show-actions">
+                        <a class="btn pink" href="https://www.instagram.com/dbcomedy14/" target="_blank"
+                            rel="noopener">Follow</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2>Contact</h2>
+            <div class="contact-card">
+                <div class="contact-list">
+                    <div class="row">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path
+                                d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1A19.3 19.3 0 0 1 4.2 10.8 19.8 19.8 0 0 1 1.1 2.2 2 2 0 0 1 3 0h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8l-1.3 1.3a16 16 0 0 0 6.8 6.8l1.3-1.3a2 2 0 0 1 1.8-.6l3 .5A2 2 0 0 1 22 16.9z" />
+                        </svg>
+                        <a href="sms:+17323951102">text-me (+1&nbsp;732&nbsp;395&nbsp;1102)</a>
+                    </div>
+                    <div class="row">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
+                            <path d="m22 6-10 7L2 6" />
+                        </svg>
+                        <a href="mailto:antmoreno1000@gmail.com">email-me (antmoreno1000@gmail.com)</a>
+                    </div>
+                    <div class="row">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <circle cx="18" cy="6" r="1"></circle>
+                        </svg>
+                        <a href="https://www.instagram.com/anthonymoreno__/" target="_blank" rel="noopener">dm-me
+                            (@anthonymoreno__)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        /* ================== THUMBNAIL LOADER WITH FALLBACKS ================== */
+        const FALLBACK_THUMB = './dbai.png';
+        const EXT_ORDER = ['.jpg', '.jpeg', '.png', '.webp'];
+
+        function tryLoad(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(src);
+                img.onerror = reject;
+                img.src = src;
+            });
+        }
+
+        async function resolveThumb(basePath) {
+            for (const ext of EXT_ORDER) {
+                try { return await tryLoad(basePath + ext); } catch (e) { }
+            }
+            return FALLBACK_THUMB;
+        }
+
+        /* ================== SHOWS DATA ================== */
+        const shows = [
+            {
+                id: 'DNbGpTKRzhJ', date: 'TBA', city: '—', venue: '—',
+                link: 'https://www.instagram.com/reel/DNbGpTKRzhJ/', thumbBase: './thumbs/DNbGpTKRzhJ'
+            },
+            {
+                id: 'DHPMztypBsl', date: 'TBA', city: '—', venue: '—',
+                link: 'https://www.instagram.com/reel/DHPMztypBsl/', thumbBase: './thumbs/DHPMztypBsl'
+            },
+            {
+                id: 'DEkwPnmRckD', date: 'TBA', city: '—', venue: '—',
+                link: 'https://www.instagram.com/reel/DEkwPnmRckD/', thumbBase: './thumbs/DEkwPnmRckD'
+            }
+        ];
+
+        function renderShows() {
+            const grid = document.getElementById('showsGrid');
+            grid.innerHTML = '';
+            shows.forEach(s => {
+                const card = document.createElement('article');
+                card.className = 'show-card';
+
+                // Top (link + skeleton placeholder)
+                const link = document.createElement('a');
+                link.className = 'thumb-link';
+                link.href = s.link;
+                link.target = '_blank';
+                link.rel = 'noopener';
+                link.setAttribute('aria-label', `Open reel ${s.id}`);
+
+                const skeleton = document.createElement('div');
+                skeleton.className = 'thumb-skeleton';
+                skeleton.dataset.thumbBase = s.thumbBase;
+                skeleton.dataset.alt = `Show reel ${s.id} thumbnail`;
+
+                link.appendChild(skeleton);
+                card.appendChild(link);
+
+                // Body
+                const body = document.createElement('div');
+                body.className = 'show-body';
+                body.innerHTML = `
+          <div class="show-topline">
+            <span class="badge">${s.date || 'TBA'}</span>
+            <span class="badge">${s.city || '—'}</span>
+            <span class="badge">${s.venue || '—'}</span>
+          </div>
+          <div class="show-title">Live Set</div>
+          <div class="show-meta">Tap to watch the reel</div>
+          <div class="show-actions">
+            <a class="btn"      href="${s.link}" target="_blank" rel="noopener">Watch</a>
+            <a class="btn pink" href="https://www.instagram.com/anthonymoreno__/" target="_blank" rel="noopener">Book</a>
+          </div>`;
+                card.appendChild(body);
+
+                grid.appendChild(card);
+            });
+
+            // After cards exist, hydrate thumbnails
+            hydrateThumbs();
+        }
+
+        async function hydrateThumbs() {
+            const placeholders = document.querySelectorAll('.thumb-skeleton');
+            for (const ph of placeholders) {
+                const base = ph.dataset.thumbBase;
+                const alt = ph.dataset.alt || 'Show thumbnail';
+                const src = await resolveThumb(base);
+                const img = new Image();
+                img.className = 'show-thumb';
+                img.alt = alt;
+                img.loading = 'lazy';
+                img.src = src;
+                img.onload = () => ph.replaceWith(img);
+                img.onerror = () => { img.src = FALLBACK_THUMB; ph.replaceWith(img); };
+            }
+        }
+
+        renderShows();
+    </script>
+</body>
+
+</html>

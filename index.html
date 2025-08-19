@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DB — Scroll Site</title>
+    <title>DB — Site</title>
 
-    <!-- Preload hero images -->
+    <!-- Preload heroes -->
     <link rel="preload" as="image" href="./dbai.png" media="(min-width: 769px)" />
     <link rel="preload" as="image" href="./dbmobile.png" media="(max-width: 768px)" />
 
@@ -36,59 +36,50 @@
             margin: 0;
             background: #000;
             color: #fff;
-            font-family: 'Baloo 2', system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif;
+            font-family: 'Baloo 2', system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif
         }
 
         :root {
-            --hero-y: 30%;
-            --edge-gap: clamp(16px, 4vw, 28px);
-            --row-size: clamp(18px, 2.4vw, 28px);
-            --card-radius: 16px;
+            --edge: clamp(16px, 4vw, 28px);
+            --row: clamp(18px, 2.4vw, 28px);
+            --radius: 18px;
 
-            /* Pastel blue/purple theme */
-            --ink: #0c0d14;
+            /* Pastel blue/purple */
             --p-blue: #b9c8ff;
-            --p-blue-strong: #8fa6ff;
+            --p-blue-2: #8fa6ff;
             --p-purple: #e1ccff;
-            --p-purple-strong: #c19bff;
-            --chip: #14151c;
+            --p-purple-2: #c19bff;
             --border: rgba(189, 200, 255, .25);
-            --glow: 0 0 0 2px rgba(185, 200, 255, .18);
+            --ink: #0b0d16;
             --surface: #0f1118;
+            --chip: #14151c;
+            --glow: 0 0 0 2px rgba(185, 200, 255, .18);
         }
 
-        /* ================= HERO ================= */
+        /* HERO */
         .hero {
             position: relative;
             min-height: 100svh;
-            background: center var(--hero-y)/cover no-repeat url("./dbai.png");
-            overflow: hidden;
+            background: center 30%/cover no-repeat url("./dbai.png");
+            overflow: hidden
         }
 
         @media (max-width:768px) {
-            :root {
-                --edge-gap: clamp(14px, 5vw, 24px);
-                --row-size: clamp(16px, 4.7vw, 20px);
-                --hero-y: 38%
-            }
-
             .hero {
-                background-image: url("./dbmobile.png")
+                background-image: url("./dbmobile.png");
+                background-position: center 38%
             }
         }
 
-        /* Brand / Logo */
         .brand {
             position: absolute;
-            top: max(var(--edge-gap), env(safe-area-inset-top));
-            left: max(var(--edge-gap), env(safe-area-inset-left));
+            top: max(var(--edge), env(safe-area-inset-top));
+            left: max(var(--edge), env(safe-area-inset-left));
             z-index: 6;
             display: flex;
-            align-items: center;
             gap: 10px;
-            color: #fff;
-            text-decoration: none;
-            filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .55));
+            align-items: center;
+            filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .55))
         }
 
         .brand img {
@@ -96,76 +87,76 @@
             display: block
         }
 
-        .brand .wordmark {
+        .brand .word {
             display: none;
             font-family: 'Permanent Marker', system-ui;
             font-size: clamp(22px, 5vw, 40px);
             letter-spacing: .02em;
-            text-shadow: 0 2px 0 rgba(0, 0, 0, .35), .5px .5px 0 var(--ink), -1px 0 0 var(--ink), 0 -1px 0 var(--ink), 1px 0 0 var(--ink);
+            text-shadow: 0 2px 0 rgba(0, 0, 0, .35), 1px 0 0 var(--ink), -1px 0 0 var(--ink), 0 1px 0 var(--ink), 0 -1px 0 var(--ink)
         }
 
-        .brand img[style*="display: none"]+.wordmark {
+        .brand img[style*="display: none"]+.word {
             display: block
         }
 
-        /* Bottom rails */
-        .bottom-row {
+        .bottom {
             position: absolute;
             left: 0;
             right: 0;
-            bottom: max(var(--edge-gap), env(safe-area-inset-bottom));
-            padding: 0 var(--edge-gap);
+            bottom: max(var(--edge), env(safe-area-inset-bottom));
+            padding: 0 var(--edge);
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             gap: 12px;
-            font-size: var(--row-size);
-            line-height: 1;
-            z-index: 2;
+            font-size: var(--row);
+            z-index: 2
         }
 
         @media (max-width:768px) {
-            .bottom-row {
+            .bottom {
                 display: grid;
                 grid-template-columns: 1fr auto;
                 align-items: end
             }
         }
 
-        /* Menu */
-        .menu-left {
+        .menu {
             display: flex;
             gap: clamp(12px, 4.5vw, 36px);
             font-family: 'Permanent Marker', system-ui;
             text-transform: uppercase;
             letter-spacing: .02em;
-            user-select: none;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, .35);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, .35)
         }
 
-        .menu-left a {
+        .menu a,
+        .menu button {
             color: #fff;
-            text-decoration: none;
+            background: transparent;
+            border: 0;
+            cursor: pointer;
             padding: .15em .05em;
             border-radius: .15em;
+            text-decoration: none;
             box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0);
-            transition: box-shadow .12s ease, transform .12s ease;
+            transition: box-shadow .12s, transform .12s
         }
 
-        .menu-left a:hover {
+        .menu a:hover,
+        .menu button:hover {
             box-shadow: inset 0 -6px 0 rgba(185, 200, 255, .35);
             transform: translateY(-1px)
         }
 
         @media (max-width:768px) {
-            .menu-left {
+            .menu {
                 flex-direction: column;
                 gap: 10px;
                 align-items: flex-start
             }
         }
 
-        /* Socials */
         .socials {
             display: flex;
             gap: 16px;
@@ -179,7 +170,7 @@
             color: #fff;
             filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .45));
             opacity: .95;
-            transition: transform .12s ease, opacity .12s ease
+            transition: transform .12s, opacity .12s
         }
 
         .socials a:hover {
@@ -190,8 +181,8 @@
         @media (max-width:768px) {
             .socials {
                 flex-direction: column;
-                align-items: flex-end;
-                gap: 12px
+                gap: 12px;
+                align-items: flex-end
             }
         }
 
@@ -201,99 +192,135 @@
             display: block
         }
 
-        /* ================= SECTIONS ================= */
-        .section {
-            padding: 80px var(--edge-gap);
-            scroll-margin-top: 72px
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .28);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .15s;
+            z-index: 3
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto
+        .overlay.show {
+            opacity: 1;
+            pointer-events: auto
         }
 
-        .section h2 {
-            margin: 0 0 16px;
+        /* PAGES (shows) */
+        .page {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .88);
+            display: none;
+            z-index: 5;
+            padding: calc(var(--edge) + env(safe-area-inset-top)) var(--edge) var(--edge);
+            overflow: hidden
+        }
+
+        .page.show {
+            display: block
+        }
+
+        .close {
+            position: absolute;
+            top: max(var(--edge), env(safe-area-inset-top));
+            left: var(--edge);
+            background: transparent;
+            border: 0;
+            color: #fff;
+            cursor: pointer;
+            font-family: 'Permanent Marker', system-ui;
+            font-size: clamp(20px, 3vw, 28px)
+        }
+
+        .title {
+            margin: 0 0 12px;
             text-align: center;
             font-family: 'Permanent Marker', system-ui;
-            letter-spacing: .02em;
             text-transform: uppercase;
-            font-size: clamp(28px, 6vw, 60px);
-            text-shadow: 0 3px 0 rgba(0, 0, 0, .45), 1px 0 0 var(--ink), -1px 0 0 var(--ink), 0 1px 0 var(--ink), 0 -1px 0 var(--ink);
+            letter-spacing: .02em;
+            font-size: clamp(32px, 7vw, 72px);
+            text-shadow: 0 3px 0 rgba(0, 0, 0, .45), 1px 0 0 var(--ink), -1px 0 0 var(--ink), 0 1px 0 var(--ink), 0 -1px 0 var(--ink)
         }
 
-        /* Shows grid */
-        .shows-grid {
+        .scroll {
+            height: calc(100svh - (var(--edge) + env(safe-area-inset-top)) - var(--edge));
+            overflow: auto;
+            padding-top: 8px
+        }
+
+        .btn {
+            --a: var(--p-blue);
+            --b: var(--p-purple);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--a), var(--b));
+            color: #0e0b16;
+            text-decoration: none;
+            font-family: 'Permanent Marker', system-ui;
+            font-size: 18px;
+            letter-spacing: .02em;
+            box-shadow: var(--glow), 0 10px 24px rgba(0, 0, 0, .35);
+            transition: transform .12s, filter .12s, box-shadow .12s
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: var(--glow), 0 14px 28px rgba(0, 0, 0, .45)
+        }
+
+        /* Shows cards */
+        .grid {
             display: grid;
             gap: 16px;
             grid-template-columns: repeat(3, minmax(0, 1fr))
         }
 
         @media (max-width:1100px) {
-            .shows-grid {
+            .grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr))
             }
         }
 
         @media (max-width:640px) {
-            .shows-grid {
+            .grid {
                 grid-template-columns: 1fr
             }
         }
 
-        .show-card {
+        .card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--card-radius);
+            border-radius: var(--radius);
             overflow: hidden;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, .45);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, .45)
         }
 
-        /* Skeleton + image handling */
-        .thumb-link {
-            display: block;
-            text-decoration: none;
-            color: inherit
-        }
-
-        .thumb-skeleton {
+        .thumb {
             width: 100%;
             aspect-ratio: 16/9;
-            background: linear-gradient(90deg, #0f1118 0%, #171a22 48%, #0f1118 100%);
-            background-size: 200% 100%;
-            animation: pulse 1.2s ease-in-out infinite;
+            object-fit: cover;
+            display: block;
+            background: #111
         }
 
         @media (max-width:640px) {
-            .thumb-skeleton {
+            .thumb {
                 aspect-ratio: 4/5
             }
         }
 
-        @keyframes pulse {
-            0% {
-                background-position: 200% 0
-            }
-
-            100% {
-                background-position: -200% 0
-            }
-        }
-
-        .show-thumb {
-            width: 100%;
-            display: block;
-            object-fit: cover;
-            background: #111
-        }
-
-        /* keep aspect via container */
-
-        .show-body {
+        .body {
             padding: 12px 14px 14px
         }
 
-        .show-topline {
+        .top {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
@@ -301,7 +328,7 @@
         }
 
         .badge {
-            background: #14151c;
+            background: var(--chip);
             border: 1px solid var(--border);
             border-radius: 999px;
             padding: 6px 10px;
@@ -311,7 +338,7 @@
             box-shadow: var(--glow)
         }
 
-        .show-title {
+        .h3 {
             margin: 10px 0 4px;
             font-family: 'Permanent Marker', system-ui;
             letter-spacing: .02em;
@@ -320,104 +347,220 @@
             line-height: 1
         }
 
-        .show-meta {
+        .meta {
             opacity: .9;
             font-size: 14px
         }
 
-        .show-actions {
+        .actions {
             margin-top: 12px;
             display: flex;
             gap: 10px;
             flex-wrap: wrap
         }
 
-        /* Buttons */
-        .btn {
-            --bg1: var(--p-blue);
-            --bg2: var(--p-purple);
-            color: #0e0b16;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 14px;
-            border-radius: 14px;
+        /* ========== HIGHLIGHTS (4 boxes) ========== */
+        .section {
+            padding: 72px var(--edge)
+        }
+
+        .section h2 {
+            margin: 0 0 16px;
+            text-align: center;
             font-family: 'Permanent Marker', system-ui;
-            font-size: 18px;
+            text-transform: uppercase;
             letter-spacing: .02em;
-            background: linear-gradient(135deg, var(--bg1), var(--bg2));
-            border: 1px solid var(--border);
-            box-shadow: var(--glow), 0 10px 24px rgba(0, 0, 0, .35);
-            transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+            font-size: clamp(28px, 6vw, 60px);
+            text-shadow: 0 3px 0 rgba(0, 0, 0, .45), 1px 0 0 var(--ink), -1px 0 0 var(--ink), 0 1px 0 var(--ink), 0 -1px 0 var(--ink)
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.05);
-            box-shadow: var(--glow), 0 14px 28px rgba(0, 0, 0, .45)
-        }
-
-        .btn:active {
-            transform: translateY(0);
-            filter: brightness(.98)
-        }
-
-        .btn.pink {
-            --bg1: var(--p-purple);
-            --bg2: var(--p-blue-strong);
-        }
-
-        /* Shop card */
-        .shop-card {
-            max-width: 560px;
+        .mosaic {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            grid-auto-rows: 240px;
+            max-width: 1200px;
             margin: 0 auto
         }
 
-        /* Contact block */
-        .contact-card {
-            background: linear-gradient(180deg, rgba(16, 18, 26, .72), rgba(16, 18, 26, .6));
-            border: 1px solid var(--border);
+        .tile {
+            position: relative;
+            padding: 18px;
             border-radius: 18px;
-            padding: 18px 18px 12px;
-            box-shadow: 0 18px 40px rgba(0, 0, 0, .45), var(--glow);
-            max-width: 900px;
-            margin: 0 auto;
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, #0f1118, #0e1118);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, .45);
+            overflow: hidden
         }
 
-        .contact-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px
+        .tile h3 {
+            margin: 0 0 8px;
+            font-family: 'Permanent Marker', system-ui;
+            font-size: clamp(22px, 4.5vw, 34px)
         }
 
-        .row {
+        .tile p {
+            margin: 0 0 10px;
+            opacity: .9
+        }
+
+        /* layout */
+        .t1 {
+            grid-column: 1 / span 7;
+            grid-row: 1 / span 2
+        }
+
+        /* Pictures big left */
+        .t2 {
+            grid-column: 8 / span 5;
+            grid-row: 1 / span 1
+        }
+
+        /* Reviews full tile */
+        .t3 {
+            grid-column: 8 / span 5;
+            grid-row: 2 / span 2
+        }
+
+        /* Reels tall right */
+        .t4 {
+            grid-column: 1 / span 7;
+            grid-row: 3 / span 1
+        }
+
+        /* About square left bottom */
+        @media (max-width:900px) {
+            .mosaic {
+                grid-template-columns: repeat(6, minmax(0, 1fr));
+                grid-auto-rows: 210px
+            }
+
+            .t1,
+            .t2,
+            .t3,
+            .t4 {
+                grid-column: 1 / span 6;
+                grid-row: auto
+            }
+        }
+
+        /* Pictures: clean image */
+        .pic-wrap {
+            position: absolute;
+            inset: 0;
+            padding: 18px
+        }
+
+        .pic {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            box-shadow: var(--glow)
+        }
+
+        /* Reviews: full-tile card (image left) */
+        .review {
+            position: absolute;
+            inset: 18px;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
             display: grid;
-            grid-template-columns: 28px 1fr;
-            align-items: center;
+            grid-template-columns: 64px 1fr;
             gap: 12px;
-            padding: 10px;
-            border-radius: 12px;
-            transition: background .12s ease
+            align-items: center;
+            box-shadow: var(--glow)
         }
 
-        .row:hover {
-            background: rgba(185, 200, 255, .10)
+        .review img {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--border)
         }
 
-        .ico {
-            width: 20px;
-            height: 20px;
-            color: #dfe4ff;
+        .stars {
+            display: flex;
+            gap: 4px;
+            margin: 6px 0
+        }
+
+        .stars svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffd166;
+            filter: drop-shadow(0 1px 0 rgba(0, 0, 0, .3))
+        }
+
+        .r-name {
+            font-weight: 700
+        }
+
+        .r-text {
             opacity: .95
         }
 
-        .row a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 700;
-            letter-spacing: .01em;
-            word-break: break-word
+        /* Reels: video fills the whole container */
+        .t3 .short {
+            position: absolute;
+            inset: 18px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: var(--glow)
+        }
+
+        .t3 .short iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block
+        }
+
+        /* soften bottom-right to de-emphasize watermark */
+        .t3 .wm-mask {
+            position: absolute;
+            right: 18px;
+            bottom: 18px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(100px 100px at bottom right, rgba(0, 0, 0, .55), transparent 70%);
+            pointer-events: none
+        }
+
+        /* About: text only, clean square */
+        .about-only {
+            position: absolute;
+            inset: 18px;
+            display: flex;
+            align-items: center
+        }
+
+        .about-only h3 {
+            margin: 0 0 6px
+        }
+
+        .about-only p {
+            margin: 0;
+            max-width: 70ch
+        }
+
+        /* Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px) scale(.98);
+            transition: 600ms ease
+        }
+
+        .reveal.in {
+            opacity: 1;
+            transform: none
         }
     </style>
 </head>
@@ -425,207 +568,159 @@
 <body>
 
     <!-- HERO -->
-    <header class="hero" aria-label="Hero">
-        <a class="brand" href="#" aria-label="David Burrows — Home">
+    <header class="hero">
+        <a class="brand" href="/" aria-label="Home">
             <img src="./db-logo.svg" alt="David Burrows logo"
                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <span class="wordmark">DAVID&nbsp;BURROWS</span>
+            <span class="word">DB</span>
         </a>
 
-        <div class="bottom-row">
-            <nav class="menu-left" aria-label="Primary links">
+        <div class="bottom">
+            <nav class="menu" aria-label="Primary">
                 <a href="#shows">Shows</a>
-                <a href="#shop">Shop</a>
-                <a href="#contact">Contact</a>
+                <a href="#highlights">Highlights</a>
+                <button id="contactBtn">Contact</button>
             </nav>
-
-            <div class="socials" aria-label="Social links">
+            <div class="socials" aria-label="Socials">
                 <a href="https://www.instagram.com/dbcomedy14/" target="_blank" rel="noopener" aria-label="Instagram">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                        <circle cx="12" cy="12" r="4"></circle>
-                        <circle cx="18" cy="6" r="1"></circle>
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                        <circle cx="12" cy="12" r="4" />
+                        <circle cx="18" cy="6" r="1" />
                     </svg>
                 </a>
                 <a href="https://www.tiktok.com/@dbcomedy14?_t=ZT-8yjyCl2pKnu&_r=1" target="_blank" rel="noopener"
                     aria-label="TikTok">
-                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
                         <path
                             d="M12.8 3a6.6 6.6 0 0 0 4.9 2.1V8A9.3 9.3 0 0 1 14 6.7v6.7a5.4 5.4 0 1 1-5.4-5.4c.3 0 .7 0 1 .1V10a2.9 2.9 0 1 0 2 2.7V3h1.2Z" />
                     </svg>
                 </a>
             </div>
         </div>
+
+        <div id="overlay" class="overlay" aria-hidden="true"></div>
+
+        <!-- Shows overlay -->
+        <div id="showsPage" class="page" aria-label="Shows">
+            <button class="close" id="closeShows">← Back</button>
+            <h2 class="title">Shows</h2>
+            <div class="scroll">
+                <div id="showsGrid" class="grid" aria-live="polite"></div>
+            </div>
+        </div>
     </header>
 
-    <!-- SHOWS -->
-    <section id="shows" class="section">
-        <div class="container">
-            <h2>Shows</h2>
-            <div id="showsGrid" class="shows-grid" aria-live="polite"></div>
-        </div>
-    </section>
+    <!-- ========== HIGHLIGHTS (4 boxes) ========== -->
+    <section class="section" id="highlights">
+        <h2>Highlights</h2>
+        <div class="mosaic">
+            <!-- Pictures -->
+            <article class="tile t1 reveal" aria-label="Pictures">
+                <div class="pic-wrap"><img class="pic" src="./db.png" alt="David on stage"></div>
+            </article>
 
-    <!-- SHOP -->
-    <section id="shop" class="section">
-        <div class="container">
-            <h2>Shop</h2>
-            <article class="show-card shop-card">
-                <a class="thumb-link" href="https://www.instagram.com/dbcomedy14/" target="_blank" rel="noopener"
-                    aria-label="Shop teaser">
-                    <div class="thumb-skeleton" aria-hidden="true"></div>
-                </a>
-                <div class="show-body">
-                    <div class="show-title">Coming Soon</div>
-                    <div class="show-meta">Merch and more on the way. Follow on Instagram for updates.</div>
-                    <div class="show-actions">
-                        <a class="btn pink" href="https://www.instagram.com/dbcomedy14/" target="_blank"
-                            rel="noopener">Follow</a>
+            <!-- Reviews (full tile, image left, no button) -->
+            <article class="tile t2 reveal" aria-label="Review">
+                <div class="review">
+                    <img src="./db.png" alt="Reviewer avatar" onerror="this.src='./dbai.png'">
+                    <div>
+                        <div class="r-name">Club Booker • NYC</div>
+                        <div class="stars" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
+                            </svg>
+                        </div>
+                        <div class="r-text">“Crowd loved him — clean, quick, and knows how to work a room.”</div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Reels (video fills tile, autoplay/mute/loop, no controls) -->
+            <article class="tile t3 reveal" aria-label="Reel">
+                <div class="short">
+                    <iframe
+                        src="https://www.youtube.com/embed/ds_Sg2BIWs4?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&modestbranding=1&loop=1&playlist=ds_Sg2BIWs4"
+                        title="YouTube Short" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        allow="autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+                </div>
+                <div class="wm-mask" aria-hidden="true"></div>
+            </article>
+
+            <!-- About Me (text only) -->
+            <article class="tile t4 reveal" aria-label="About Me">
+                <div class="about-only">
+                    <div>
+                        <h3>About Me</h3>
+                        <p>David Burrows is a high-energy comedian mixing crowd-work, storytelling, and sharp one-liners
+                            around the tri-state area.</p>
                     </div>
                 </div>
             </article>
         </div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="section">
-        <div class="container">
-            <h2>Contact</h2>
-            <div class="contact-card">
-                <div class="contact-list">
-                    <div class="row">
-                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path
-                                d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1A19.3 19.3 0 0 1 4.2 10.8 19.8 19.8 0 0 1 1.1 2.2 2 2 0 0 1 3 0h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8l-1.3 1.3a16 16 0 0 0 6.8 6.8l1.3-1.3a2 2 0 0 1 1.8-.6l3 .5A2 2 0 0 1 22 16.9z" />
-                        </svg>
-                        <a href="sms:+17323951102">text-me (+1&nbsp;732&nbsp;395&nbsp;1102)</a>
-                    </div>
-                    <div class="row">
-                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
-                            <path d="m22 6-10 7L2 6" />
-                        </svg>
-                        <a href="mailto:antmoreno1000@gmail.com">email-me (antmoreno1000@gmail.com)</a>
-                    </div>
-                    <div class="row">
-                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                            <circle cx="12" cy="12" r="4"></circle>
-                            <circle cx="18" cy="6" r="1"></circle>
-                        </svg>
-                        <a href="https://www.instagram.com/anthonymoreno__/" target="_blank" rel="noopener">dm-me
-                            (@anthonymoreno__)</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <script>
-        /* ================== THUMBNAIL LOADER WITH FALLBACKS ================== */
-        const FALLBACK_THUMB = './dbai.png';
-        const EXT_ORDER = ['.jpg', '.jpeg', '.png', '.webp'];
+        /* Overlay for shows */
+        const overlay = document.getElementById('overlay');
+        const showsPage = document.getElementById('showsPage');
+        document.querySelector('.menu a[href="#shows"]').addEventListener('click', e => {
+            e.preventDefault(); showsPage.classList.add('show'); overlay.classList.add('show');
+        });
+        document.getElementById('closeShows').addEventListener('click', () => { showsPage.classList.remove('show'); overlay.classList.remove('show'); });
+        overlay.addEventListener('click', () => { showsPage.classList.remove('show'); overlay.classList.remove('show'); });
 
-        function tryLoad(src) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.onload = () => resolve(src);
-                img.onerror = reject;
-                img.src = src;
-            });
-        }
+        /* Contact quick modal (simple) */
+        document.getElementById('contactBtn').addEventListener('click', e => {
+            e.preventDefault();
+            alert('Text: +1 732 395 1102\nEmail: antmoreno1000@gmail.com\nDM: @anthonymoreno__');
+        });
 
-        async function resolveThumb(basePath) {
-            for (const ext of EXT_ORDER) {
-                try { return await tryLoad(basePath + ext); } catch (e) { }
-            }
-            return FALLBACK_THUMB;
-        }
-
-        /* ================== SHOWS DATA ================== */
+        /* Shows data */
         const shows = [
-            {
-                id: 'DNbGpTKRzhJ', date: 'TBA', city: '—', venue: '—',
-                link: 'https://www.instagram.com/reel/DNbGpTKRzhJ/', thumbBase: './thumbs/DNbGpTKRzhJ'
-            },
-            {
-                id: 'DHPMztypBsl', date: 'TBA', city: '—', venue: '—',
-                link: 'https://www.instagram.com/reel/DHPMztypBsl/', thumbBase: './thumbs/DHPMztypBsl'
-            },
-            {
-                id: 'DEkwPnmRckD', date: 'TBA', city: '—', venue: '—',
-                link: 'https://www.instagram.com/reel/DEkwPnmRckD/', thumbBase: './thumbs/DEkwPnmRckD'
-            }
+            { id: 'DNbGpTKRzhJ', date: 'TBA', city: '—', venue: '—', link: 'https://www.instagram.com/reel/DNbGpTKRzhJ/', thumb: './thumbs/DNbGpTKRzhJ.jpg' },
+            { id: 'DHPMztypBsl', date: 'TBA', city: '—', venue: '—', link: 'https://www.instagram.com/reel/DHPMztypBsl/', thumb: './thumbs/DHPMztypBsl.jpg' },
+            { id: 'DEkwPnmRckD', date: 'TBA', city: '—', venue: '—', link: 'https://www.instagram.com/reel/DEkwPnmRckD/', thumb: './thumbs/DEkwPnmRckD.jpg' },
         ];
-
-        function renderShows() {
-            const grid = document.getElementById('showsGrid');
-            grid.innerHTML = '';
-            shows.forEach(s => {
-                const card = document.createElement('article');
-                card.className = 'show-card';
-
-                // Top (link + skeleton placeholder)
-                const link = document.createElement('a');
-                link.className = 'thumb-link';
-                link.href = s.link;
-                link.target = '_blank';
-                link.rel = 'noopener';
-                link.setAttribute('aria-label', `Open reel ${s.id}`);
-
-                const skeleton = document.createElement('div');
-                skeleton.className = 'thumb-skeleton';
-                skeleton.dataset.thumbBase = s.thumbBase;
-                skeleton.dataset.alt = `Show reel ${s.id} thumbnail`;
-
-                link.appendChild(skeleton);
-                card.appendChild(link);
-
-                // Body
-                const body = document.createElement('div');
-                body.className = 'show-body';
-                body.innerHTML = `
-          <div class="show-topline">
+        const grid = document.getElementById('showsGrid');
+        grid.innerHTML = shows.map(s => `
+      <article class="card">
+        <a href="${s.link}" target="_blank" rel="noopener"><img class="thumb" src="${s.thumb}" alt="Show ${s.id}" loading="lazy"></a>
+        <div class="body">
+          <div class="top">
             <span class="badge">${s.date || 'TBA'}</span>
             <span class="badge">${s.city || '—'}</span>
             <span class="badge">${s.venue || '—'}</span>
           </div>
-          <div class="show-title">Live Set</div>
-          <div class="show-meta">Tap to watch the reel</div>
-          <div class="show-actions">
-            <a class="btn"      href="${s.link}" target="_blank" rel="noopener">Watch</a>
-            <a class="btn pink" href="https://www.instagram.com/anthonymoreno__/" target="_blank" rel="noopener">Book</a>
-          </div>`;
-                card.appendChild(body);
+          <div class="h3">Live Set</div>
+          <div class="meta">Tap to watch the reel</div>
+          <div class="actions">
+            <a class="btn" href="${s.link}" target="_blank" rel="noopener">Watch</a>
+            <a class="btn" style="--a:var(--p-purple);--b:var(--p-blue-2)" href="https://www.instagram.com/anthonymoreno__/" target="_blank" rel="noopener">Book</a>
+          </div>
+        </div>
+      </article>
+    `).join('');
 
-                grid.appendChild(card);
-            });
-
-            // After cards exist, hydrate thumbnails
-            hydrateThumbs();
-        }
-
-        async function hydrateThumbs() {
-            const placeholders = document.querySelectorAll('.thumb-skeleton');
-            for (const ph of placeholders) {
-                const base = ph.dataset.thumbBase;
-                const alt = ph.dataset.alt || 'Show thumbnail';
-                const src = await resolveThumb(base);
-                const img = new Image();
-                img.className = 'show-thumb';
-                img.alt = alt;
-                img.loading = 'lazy';
-                img.src = src;
-                img.onload = () => ph.replaceWith(img);
-                img.onerror = () => { img.src = FALLBACK_THUMB; ph.replaceWith(img); };
-            }
-        }
-
-        renderShows();
+        /* Reveal on scroll */
+        const io = new IntersectionObserver((es) => {
+            es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: .12 });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     </script>
 </body>
 

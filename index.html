@@ -411,7 +411,7 @@
 
         .tile {
             position: relative;
-            padding: 20px;
+            padding: 0;
             border-radius: 20px;
             border: 1px solid var(--border);
             background: linear-gradient(135deg, #0f1118, #14151c);
@@ -429,13 +429,15 @@
             margin: 0 0 8px;
             font-family: 'Permanent Marker', system-ui;
             font-size: clamp(22px, 4.5vw, 34px);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, .4)
+            text-shadow: 0 2px 4px rgba(0, 0, 0, .4);
+            padding: 0;
         }
 
         .tile p {
             margin: 0 0 10px;
             opacity: .9;
-            line-height: 1.5
+            line-height: 1.5;
+            padding: 0;
         }
 
         /* Enhanced Grid Layout */
@@ -475,12 +477,7 @@
         }
 
         .t8 {
-            grid-column: 1 / span 6;
-            grid-row: 4 / span 1;
-        }
-
-        .t9 {
-            grid-column: 7 / span 6;
+            grid-column: 1 / span 12;
             grid-row: 4 / span 1;
         }
 
@@ -526,13 +523,53 @@
             }
 
             .t8 {
-                grid-column: 5 / span 4;
+                grid-column: 1 / span 8;
                 grid-row: 5 / span 1;
             }
 
-            .t9 {
-                grid-column: 1 / span 8;
+            .t10 {
+                grid-column: 5 / span 4;
                 grid-row: 6 / span 1;
+            }
+
+            .t11 {
+                grid-column: 1 / span 4;
+                grid-row: 7 / span 1;
+            }
+
+            .t12 {
+                grid-column: 5 / span 4;
+                grid-row: 7 / span 1;
+            }
+
+            .t13 {
+                grid-column: 1 / span 4;
+                grid-row: 8 / span 1;
+            }
+
+            .t14 {
+                grid-column: 5 / span 4;
+                grid-row: 8 / span 1;
+            }
+
+            .t15 {
+                grid-column: 1 / span 4;
+                grid-row: 9 / span 1;
+            }
+
+            .t16 {
+                grid-column: 5 / span 4;
+                grid-row: 9 / span 1;
+            }
+
+            .t17 {
+                grid-column: 1 / span 4;
+                grid-row: 10 / span 1;
+            }
+
+            .t18 {
+                grid-column: 5 / span 4;
+                grid-row: 10 / span 1;
             }
         }
 
@@ -551,7 +588,15 @@
             .t6,
             .t7,
             .t8,
-            .t9 {
+            .t10,
+            .t11,
+            .t12,
+            .t13,
+            .t14,
+            .t15,
+            .t16,
+            .t17,
+            .t18 {
                 grid-column: 1;
                 grid-row: auto
             }
@@ -559,38 +604,40 @@
 
         .pic-wrap {
             position: absolute;
-            inset: 20px;
+            inset: 12px;
             border-radius: 16px;
-            overflow: hidden
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            background: rgba(0, 0, 0, .6);
         }
 
         .pic {
             width: 100%;
             height: 100%;
             display: block;
-            object-fit: cover;
+            object-fit: contain;
+            object-position: center;
+            border: 0;
+            transition: transform .3s ease;
             border-radius: 16px;
-            border: 1px solid var(--border);
-            box-shadow: var(--glow);
-            transition: transform .3s ease
         }
 
         .tile:hover .pic {
-            transform: scale(1.05)
+            transform: scale(1.08)
         }
 
         .review {
             position: absolute;
-            inset: 20px;
+            inset: 0;
             background: rgba(14, 17, 24, .85);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 18px;
+            border: 0;
+            border-radius: 20px;
+            padding: 20px;
             display: grid;
             grid-template-columns: 72px 1fr;
             gap: 14px;
             align-items: center;
-            box-shadow: var(--glow);
             backdrop-filter: blur(10px)
         }
 
@@ -638,12 +685,11 @@
 
         .t3 .video-container {
             position: absolute;
-            inset: 20px;
-            border: 1px solid var(--border);
-            border-radius: 16px;
+            inset: 0;
+            border: 0;
+            border-radius: 20px;
             overflow: hidden;
             background: #000;
-            box-shadow: var(--glow), 0 10px 30px rgba(0, 0, 0, .5)
         }
 
         .t3 .video-container iframe {
@@ -668,8 +714,8 @@
 
         .t3 .video-badge {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 16px;
+            left: 16px;
             background: rgba(0, 0, 0, .8);
             color: white;
             padding: 8px 12px;
@@ -677,28 +723,33 @@
             font-size: 12px;
             font-weight: 700;
             backdrop-filter: blur(10px);
-            border: 1px solid var(--border)
+            border: 1px solid var(--border);
+            z-index: 1;
         }
 
         .about-content {
             position: absolute;
-            inset: 20px;
+            inset: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 10px
+            align-items: center;
+            padding: 36px 48px;
+            text-align: center;
         }
 
         .about-content h3 {
-            margin-bottom: 12px;
-            color: var(--p-blue)
+            margin-bottom: 16px;
+            color: var(--p-blue);
+            font-size: clamp(28px, 5vw, 42px);
         }
 
         .about-content p {
             margin: 0;
-            max-width: 100%;
-            line-height: 1.6;
-            opacity: .95
+            max-width: 900px;
+            line-height: 1.7;
+            opacity: .95;
+            font-size: clamp(15px, 2vw, 18px);
         }
 
         /* Contact modal card */
@@ -767,6 +818,304 @@
             line-height: 1
         }
 
+        /* Calendar styles */
+        .calendar-card {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: min(800px, 92vw);
+            max-height: 80vh;
+            background: linear-gradient(180deg, rgba(16, 18, 26, .75), rgba(16, 18, 26, .6));
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px;
+            backdrop-filter: blur(12px) saturate(110%);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, .45), var(--glow);
+            overflow: auto;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .calendar-title {
+            margin: 0;
+            font-family: 'Permanent Marker', system-ui;
+            font-size: 28px;
+            letter-spacing: .02em;
+        }
+
+        .edit-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, var(--p-blue), var(--p-purple));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #0e0b16;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all .12s;
+        }
+
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .calendar-events {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .event-item {
+            background: rgba(14, 17, 24, .6);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 12px;
+            align-items: center;
+            transition: all .12s;
+        }
+
+        .event-item:hover {
+            background: rgba(14, 17, 24, .85);
+            transform: translateX(4px);
+        }
+
+        .event-date {
+            background: var(--chip);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 12px;
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .event-month {
+            font-size: 12px;
+            opacity: .8;
+            text-transform: uppercase;
+        }
+
+        .event-day {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Permanent Marker', system-ui;
+            color: var(--p-blue);
+        }
+
+        .event-details h4 {
+            margin: 0 0 4px;
+            font-family: 'Permanent Marker', system-ui;
+            font-size: 18px;
+            color: var(--p-purple);
+        }
+
+        .event-details p {
+            margin: 0;
+            opacity: .9;
+            font-size: 14px;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .event-actions button {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all .12s;
+        }
+
+        .event-actions button:hover {
+            background: rgba(255, 255, 255, .2);
+        }
+
+        .event-actions button.delete {
+            background: rgba(255, 100, 100, .2);
+        }
+
+        .event-actions button.delete:hover {
+            background: rgba(255, 100, 100, .4);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-width: 360px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(14, 17, 24, .8);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
+        }
+
+        .login-form h4 {
+            margin: 0 0 4px;
+            text-align: center;
+            font-family: 'Permanent Marker', system-ui;
+            font-size: 22px;
+            color: var(--p-blue);
+            letter-spacing: .02em;
+        }
+
+        .login-form p.subtitle {
+            margin: 0 0 12px;
+            text-align: center;
+            opacity: .7;
+            font-size: 13px;
+        }
+
+        .login-form input {
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, .4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all .12s;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--p-blue);
+            box-shadow: 0 0 0 3px rgba(185, 200, 255, .15);
+        }
+
+        .login-form input::placeholder {
+            color: rgba(255, 255, 255, .4);
+        }
+
+        .login-form button {
+            padding: 14px;
+            background: linear-gradient(135deg, var(--p-blue), var(--p-purple));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #0e0b16;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all .12s;
+            font-family: 'Permanent Marker', system-ui;
+            letter-spacing: .02em;
+            box-shadow: 0 4px 12px rgba(185, 200, 255, .3);
+        }
+
+        .login-form button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 6px 16px rgba(185, 200, 255, .4);
+        }
+
+        .add-event-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(14, 17, 24, .6);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .add-event-form input,
+        .add-event-form textarea {
+            padding: 10px;
+            background: rgba(0, 0, 0, .4);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .add-event-form textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .add-event-form button {
+            padding: 10px;
+            background: linear-gradient(135deg, var(--p-purple), var(--p-blue));
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #0e0b16;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .12s;
+        }
+
+        .add-event-form button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Additional tile layouts */
+        .t10 {
+            grid-column: 7 / span 6;
+            grid-row: 5 / span 1;
+        }
+
+        .t11 {
+            grid-column: 1 / span 3;
+            grid-row: 6 / span 1;
+        }
+
+        .t12 {
+            grid-column: 4 / span 3;
+            grid-row: 6 / span 1;
+        }
+
+        .t13 {
+            grid-column: 7 / span 3;
+            grid-row: 6 / span 1;
+        }
+
+        .t14 {
+            grid-column: 10 / span 3;
+            grid-row: 6 / span 1;
+        }
+
+        .t15 {
+            grid-column: 1 / span 4;
+            grid-row: 7 / span 1;
+        }
+
+        .t16 {
+            grid-column: 5 / span 4;
+            grid-row: 7 / span 1;
+        }
+
+        .t17 {
+            grid-column: 9 / span 4;
+            grid-row: 7 / span 1;
+        }
+
+        .t18 {
+            grid-column: 1 / span 12;
+            grid-row: 8 / span 1;
+        }
+
         /* Reveal animation */
         .reveal {
             opacity: 0;
@@ -805,6 +1154,7 @@
                 <a href="#highlights">Highlights</a>
                 <a href="#shop" id="openShop">Shop</a>
                 <button id="openContact">Contact</button>
+                <button id="openCalendar">Calendar</button>
             </nav>
             <div class="socials" aria-label="Socials">
                 <a href="https://www.instagram.com/dbcomedy14/" target="_blank" rel="noopener" aria-label="Instagram">
@@ -820,6 +1170,16 @@
                     <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
                         <path
                             d="M12.8 3a6.6 6.6 0 0 0 4.9 2.1V8A9.3 9.3 0 0 1 14 6.7v6.7a5.4 5.4 0 1 1-5.4-5.4c.3 0 .7 0 1 .1V10a2.9 2.9 0 1 0 2 2.7V3h1.2Z" />
+                    </svg>
+                </a>
+                <a href="https://www.youtube.com/@DBcomedy_14" target="_blank" rel="noopener" aria-label="YouTube">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12c0 2.1.2 4.2.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.3-1.6.5-3.7.5-5.8 0-2.1-.2-4.2-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z"/>
+                    </svg>
+                </a>
+                <a href="https://www.facebook.com/david.burrows.975910?mibextid=wwXIfr&rdid=1VwF1fh14W0rzOJF&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1DB9iXHY83%2F%3Fmibextid%3DwwXIfr" target="_blank" rel="noopener" aria-label="Facebook">
+                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.1c0-6.6-5.4-12-12-12S0 5.5 0 12.1c0 6 4.4 11 10.1 11.9v-8.4H7.1v-3.5h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9v2.3h3.4l-.5 3.5h-2.9v8.4c5.7-.9 10.1-5.9 10.1-11.9z"/>
                     </svg>
                 </a>
             </div>
@@ -888,6 +1248,42 @@
                         <a href="https://www.instagram.com/anthonymoreno__/" target="_blank" rel="noopener">DM:
                             @anthonymoreno__</a>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar modal -->
+        <div id="calendarModal" class="modal" aria-label="Calendar">
+            <button class="close" id="closeCalendar">← Back</button>
+            <div class="calendar-card" role="dialog" aria-modal="true">
+                <button class="contact-close" id="xCalendar" aria-label="Close">✕</button>
+                <div class="calendar-header">
+                    <h3 class="calendar-title">Upcoming Shows</h3>
+                    <button class="edit-btn" id="editBtn">Edit</button>
+                </div>
+
+                <!-- Login Form (hidden by default) -->
+                <div id="loginForm" class="login-form hidden">
+                    <h4>Admin Access</h4>
+                    <p class="subtitle">Enter password to manage events</p>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                    <button id="loginSubmit">Unlock</button>
+                    <p id="loginError" style="color: #ff6b6b; text-align: center; margin: 8px 0 0; font-size: 13px; display: none;"></p>
+                </div>
+
+                <!-- Add Event Form (hidden by default) -->
+                <div id="addEventForm" class="add-event-form hidden">
+                    <h4 style="margin: 0 0 8px;">Add New Event</h4>
+                    <input type="date" id="eventDate" placeholder="Date" required>
+                    <input type="text" id="eventTitle" placeholder="Event Title" required>
+                    <input type="text" id="eventLocation" placeholder="Location" required>
+                    <textarea id="eventDescription" placeholder="Description (optional)"></textarea>
+                    <button id="addEventBtn">Add Event</button>
+                </div>
+
+                <!-- Calendar Events List -->
+                <div id="calendarEvents" class="calendar-events">
+                    <!-- Events will be rendered here -->
                 </div>
             </div>
         </div>
@@ -1033,6 +1429,61 @@
                         more.</p>
                 </div>
             </article>
+
+            <!-- Additional Photos -->
+            <article class="tile t10 reveal" aria-label="Performance Photo">
+                <div class="pic-wrap">
+                    <img class="pic" src="./D B1.jpeg" alt="David performing" loading="lazy">
+                </div>
+            </article>
+
+            <article class="tile t11 reveal" aria-label="Performance Photo">
+                <div class="pic-wrap">
+                    <img class="pic" src="./D B2.jpeg" alt="David performing" loading="lazy">
+                </div>
+            </article>
+
+            <article class="tile t12 reveal" aria-label="Performance Photo">
+                <div class="pic-wrap">
+                    <img class="pic" src="./D B3.jpeg" alt="David performing" loading="lazy">
+                </div>
+            </article>
+
+            <article class="tile t13 reveal" aria-label="Performance Photo">
+                <div class="pic-wrap">
+                    <img class="pic" src="./D B4.jpeg" alt="David performing" loading="lazy">
+                </div>
+            </article>
+
+            <article class="tile t14 reveal" aria-label="Performance Photo">
+                <div class="pic-wrap">
+                    <img class="pic" src="./D B5.jpeg" alt="David performing" loading="lazy">
+                </div>
+            </article>
+
+            <article class="tile t15 reveal" aria-label="Performance Photo">
+                <div class="pic-wrap">
+                    <img class="pic" src="./D B6.jpeg" alt="David performing" loading="lazy">
+                </div>
+            </article>
+
+            <article class="tile t16 reveal" aria-label="Performance Photo">
+                <div class="pic-wrap">
+                    <img class="pic" src="./D B7.jpeg" alt="David performing" loading="lazy">
+                </div>
+            </article>
+
+            <article class="tile t17 reveal" aria-label="Performance Photo">
+                <div class="pic-wrap">
+                    <img class="pic" src="./D B8.jpeg" alt="David performing" loading="lazy">
+                </div>
+            </article>
+
+            <article class="tile t18 reveal" aria-label="Performance Photo">
+                <div class="pic-wrap">
+                    <img class="pic" src="./D B9.jpeg" alt="David performing" loading="lazy">
+                </div>
+            </article>
         </div>
     </section>
 
@@ -1065,6 +1516,11 @@
         document.getElementById('openContact').addEventListener('click', e => { e.preventDefault(); openLayer(contactModal); });
         document.getElementById('closeContact').addEventListener('click', closeLayers);
         document.getElementById('xContact').addEventListener('click', closeLayers);
+
+        const calendarModal = document.getElementById('calendarModal');
+        document.getElementById('openCalendar').addEventListener('click', e => { e.preventDefault(); openLayer(calendarModal); renderEvents(); });
+        document.getElementById('closeCalendar').addEventListener('click', closeLayers);
+        document.getElementById('xCalendar').addEventListener('click', closeLayers);
 
         overlay.addEventListener('click', closeLayers);
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLayers(); });
@@ -1113,6 +1569,166 @@
         });
 
         document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+        // ===== CALENDAR FUNCTIONALITY =====
+        let isLoggedIn = false;
+        let calendarEvents = JSON.parse(localStorage.getItem('calendarEvents') || '[]');
+
+        // Admin password (in production, this should be server-side)
+        const ADMIN_PASSWORD = 'davidanthony';
+
+        function saveEvents() {
+            localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            return {
+                month: months[date.getMonth()],
+                day: date.getDate()
+            };
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('calendarEvents');
+
+            if (calendarEvents.length === 0) {
+                container.innerHTML = '<p style="text-align: center; opacity: .7; padding: 40px 0;">No upcoming shows scheduled.</p>';
+                return;
+            }
+
+            // Sort events by date
+            const sortedEvents = [...calendarEvents].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            container.innerHTML = sortedEvents.map((event, index) => {
+                const { month, day } = formatDate(event.date);
+                return `
+                    <div class="event-item">
+                        <div class="event-date">
+                            <div class="event-month">${month}</div>
+                            <div class="event-day">${day}</div>
+                        </div>
+                        <div class="event-details">
+                            <h4>${event.title}</h4>
+                            <p>${event.location}${event.description ? ' • ' + event.description : ''}</p>
+                        </div>
+                        ${isLoggedIn ? `
+                            <div class="event-actions">
+                                <button class="delete" onclick="deleteEvent(${index})">Delete</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteEvent(index) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                calendarEvents.splice(index, 1);
+                saveEvents();
+                renderEvents();
+            }
+        }
+
+        // Edit button - show login form
+        document.getElementById('editBtn').addEventListener('click', () => {
+            if (isLoggedIn) {
+                // Already logged in, show add event form
+                document.getElementById('addEventForm').classList.toggle('hidden');
+            } else {
+                // Show login form
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('loginError').style.display = 'none';
+            }
+        });
+
+        // Login submit
+        const loginSubmit = () => {
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (password === ADMIN_PASSWORD) {
+                isLoggedIn = true;
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('addEventForm').classList.remove('hidden');
+                document.getElementById('editBtn').textContent = 'Add Event';
+                renderEvents();
+
+                // Clear form
+                document.getElementById('loginPassword').value = '';
+            } else {
+                errorEl.textContent = 'Incorrect password';
+                errorEl.style.display = 'block';
+            }
+        };
+
+        document.getElementById('loginSubmit').addEventListener('click', loginSubmit);
+
+        // Allow Enter key to submit password
+        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginSubmit();
+            }
+        });
+
+        // Add event submit
+        document.getElementById('addEventBtn').addEventListener('click', () => {
+            const date = document.getElementById('eventDate').value;
+            const title = document.getElementById('eventTitle').value;
+            const location = document.getElementById('eventLocation').value;
+            const description = document.getElementById('eventDescription').value;
+
+            if (!date || !title || !location) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const newEvent = {
+                date,
+                title,
+                location,
+                description
+            };
+
+            calendarEvents.push(newEvent);
+            saveEvents();
+            renderEvents();
+
+            // Clear form
+            document.getElementById('eventDate').value = '';
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventLocation').value = '';
+            document.getElementById('eventDescription').value = '';
+
+            // Hide form
+            document.getElementById('addEventForm').classList.add('hidden');
+        });
+
+        // Add some default events if none exist
+        if (calendarEvents.length === 0) {
+            calendarEvents = [
+                {
+                    date: '2026-04-15',
+                    title: 'Comedy Night at The Laugh Factory',
+                    location: 'New York, NY',
+                    description: '8 PM Show'
+                },
+                {
+                    date: '2026-04-22',
+                    title: 'Stand-Up Special',
+                    location: 'Brooklyn Bowl',
+                    description: '9 PM Show'
+                },
+                {
+                    date: '2026-05-01',
+                    title: 'College Show',
+                    location: 'Rutgers University',
+                    description: '7 PM Show'
+                }
+            ];
+            saveEvents();
+        }
     </script>
 </body>
 

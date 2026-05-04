@@ -1,1735 +1,1307 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DB — Site</title>
-
-    <!-- Preload heroes -->
-    <link rel="preload" as="image" href="./dbai.png" media="(min-width: 769px)" />
-    <link rel="preload" as="image" href="./dbmobile.png" media="(max-width: 768px)" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Baloo+2:wght@400;600;700&display=swap"
-        rel="stylesheet">
-
-    <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box
-        }
-
-        html,
-        body {
-            height: 100%
-        }
-
-        html {
-            scroll-behavior: smooth
-        }
-
-        body {
-            margin: 0;
-            background: #000;
-            color: #fff;
-            font-family: 'Baloo 2', system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif
-        }
-
-        :root {
-            --edge: clamp(16px, 4vw, 28px);
-            --row: clamp(18px, 2.4vw, 28px);
-            --radius: 18px;
-            --p-blue: #b9c8ff;
-            --p-blue-2: #8fa6ff;
-            --p-purple: #e1ccff;
-            --p-purple-2: #c19bff;
-            --border: rgba(189, 200, 255, .25);
-            --ink: #0b0d16;
-            --surface: #0f1118;
-            --chip: #14151c;
-            --glow: 0 0 0 2px rgba(185, 200, 255, .18);
-        }
-
-        /* HERO */
-        .hero {
-            position: relative;
-            min-height: 100svh;
-            background: center 30%/cover no-repeat url("./dbai.png");
-            overflow: hidden
-        }
-
-        @media (max-width:768px) {
-            .hero {
-                background-image: url("./dbmobile.png");
-                background-position: center 38%
-            }
-        }
-
-        /* Brand: white, no underline ever */
-        .brand {
-            position: absolute;
-            top: max(var(--edge), env(safe-area-inset-top));
-            left: max(var(--edge), env(safe-area-inset-left));
-            z-index: 6;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            filter: drop-shadow(0 6px 18px rgba(0, 0, 0, .55));
-            transition: opacity .15s ease, transform .15s ease;
-            text-decoration: none;
-        }
-
-        .brand:link,
-        .brand:visited,
-        .brand:hover,
-        .brand:active {
-            color: #fff;
-            text-decoration: none;
-            box-shadow: none
-        }
-
-        .brand img.brand-logo {
-            height: clamp(22px, 5vw, 40px);
-            display: block;
-            filter: brightness(0) invert(1)
-        }
-
-        .brand .word {
-            display: none;
-            font-family: 'Permanent Marker', system-ui;
-            font-size: clamp(22px, 5vw, 40px);
-            letter-spacing: .02em;
-            color: #fff;
-            text-shadow: 0 2px 0 rgba(0, 0, 0, .35), 1px 0 0 var(--ink), -1px 0 0 var(--ink), 0 1px 0 var(--ink), 0 -1px 0 var(--ink)
-        }
-
-        .brand img[style*="display: none"]+.word {
-            display: block
-        }
-
-        .page-open .brand {
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(-6px)
-        }
-
-        /* Bottom nav */
-        .bottom {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: max(var(--edge), env(safe-area-inset-bottom));
-            padding: 0 var(--edge);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            font-size: var(--row);
-            z-index: 2
-        }
-
-        @media (max-width:768px) {
-            .bottom {
-                display: grid;
-                grid-template-columns: 1fr auto;
-                align-items: end
-            }
-        }
-
-        .menu {
-            display: flex;
-            gap: clamp(12px, 4.5vw, 36px);
-            font-family: 'Permanent Marker', system-ui;
-            text-transform: uppercase;
-            letter-spacing: .02em;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, .35)
-        }
-
-        .menu a,
-        .menu button {
-            font: inherit;
-            letter-spacing: inherit;
-            text-transform: inherit;
-            color: #fff;
-            background: transparent;
-            border: 0;
-            cursor: pointer;
-            padding: .15em .05em;
-            border-radius: .15em;
-            text-decoration: none;
-            box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0);
-            transition: box-shadow .12s, transform .12s
-        }
-
-        .menu a:hover,
-        .menu button:hover {
-            box-shadow: inset 0 -6px 0 rgba(185, 200, 255, .35);
-            transform: translateY(-1px)
-        }
-
-        @media (max-width:768px) {
-            .menu {
-                flex-direction: column;
-                gap: 10px;
-                align-items: flex-start
-            }
-        }
-
-        .socials {
-            display: flex;
-            gap: 16px;
-            align-items: center
-        }
-
-        .socials a {
-            display: inline-flex;
-            width: 1.35em;
-            height: 1.35em;
-            color: #fff;
-            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .45));
-            opacity: .95;
-            transition: transform .12s, opacity .12s
-        }
-
-        .socials a:hover {
-            transform: scale(1.06);
-            opacity: 1
-        }
-
-        @media (max-width:768px) {
-            .socials {
-                flex-direction: column;
-                gap: 12px;
-                align-items: flex-end
-            }
-        }
-
-        .icon {
-            width: 100%;
-            height: 100%;
-            display: block
-        }
-
-        /* Shared overlay */
-        .overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, .28);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity .15s;
-            z-index: 3
-        }
-
-        .overlay.show {
-            opacity: 1;
-            pointer-events: auto
-        }
-
-        /* Overlays / pages */
-        .page,
-        .modal {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, .88);
-            display: none;
-            z-index: 5;
-            padding: calc(var(--edge) + env(safe-area-inset-top)) var(--edge) var(--edge);
-            overflow: hidden
-        }
-
-        .page.show,
-        .modal.show {
-            display: block
-        }
-
-        .close {
-            position: absolute;
-            top: max(var(--edge), env(safe-area-inset-top));
-            left: var(--edge);
-            background: transparent;
-            border: 0;
-            color: #fff;
-            cursor: pointer;
-            font-family: 'Permanent Marker', system-ui;
-            font-size: clamp(20px, 3vw, 28px)
-        }
-
-        .title {
-            margin: 0 0 12px;
-            text-align: center;
-            font-family: 'Permanent Marker', system-ui;
-            text-transform: uppercase;
-            letter-spacing: .02em;
-            font-size: clamp(32px, 7vw, 72px);
-            text-shadow: 0 3px 0 rgba(0, 0, 0, .45), 1px 0 0 var(--ink), -1px 0 0 var(--ink), 0 1px 0 var(--ink), 0 -1px 0 var(--ink)
-        }
-
-        .scroll {
-            height: calc(100svh - (var(--edge) + env(safe-area-inset-top)) - var(--edge));
-            overflow: auto;
-            padding-top: 8px
-        }
-
-        .btn {
-            --a: var(--p-blue);
-            --b: var(--p-purple);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            background: linear-gradient(135deg, var(--a), var(--b));
-            color: #0e0b16;
-            text-decoration: none;
-            font-family: 'Permanent Marker', system-ui;
-            font-size: 18px;
-            letter-spacing: .02em;
-            box-shadow: var(--glow), 0 10px 24px rgba(0, 0, 0, .35);
-            transition: transform .12s, filter .12s, box-shadow .12s
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.05);
-            box-shadow: var(--glow), 0 14px 28px rgba(0, 0, 0, .45)
-        }
-
-        /* Shows grid */
-        .grid {
-            display: grid;
-            gap: 16px;
-            grid-template-columns: repeat(3, minmax(0, 1fr))
-        }
-
-        @media (max-width:1100px) {
-            .grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr))
-            }
-        }
-
-        @media (max-width:640px) {
-            .grid {
-                grid-template-columns: 1fr
-            }
-        }
-
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, .45)
-        }
-
-        .thumb {
-            width: 100%;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            display: block;
-            background: #111
-        }
-
-        @media (max-width:640px) {
-            .thumb {
-                aspect-ratio: 4/5
-            }
-        }
-
-        .body {
-            padding: 12px 14px 14px
-        }
-
-        .top {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center
-        }
-
-        .badge {
-            background: var(--chip);
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            padding: 6px 10px;
-            font-weight: 700;
-            font-size: 13px;
-            line-height: 1;
-            box-shadow: var(--glow)
-        }
-
-        .h3 {
-            margin: 10px 0 4px;
-            font-family: 'Permanent Marker', system-ui;
-            letter-spacing: .02em;
-            text-transform: uppercase;
-            font-size: 26px;
-            line-height: 1
-        }
-
-        .meta {
-            opacity: .9;
-            font-size: 14px
-        }
-
-        .actions {
-            margin-top: 12px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap
-        }
-
-        /* ===== HIGHLIGHTS ===== */
-        .section {
-            padding: 72px var(--edge);
-            background: linear-gradient(180deg, #000 0%, #0a0b12 100%)
-        }
-
-        .section h2 {
-            margin: 0 0 32px;
-            text-align: center;
-            font-family: 'Permanent Marker', system-ui;
-            text-transform: uppercase;
-            letter-spacing: .02em;
-            font-size: clamp(28px, 6vw, 60px);
-            text-shadow: 0 3px 0 rgba(0, 0, 0, .45), 1px 0 0 var(--ink), -1px 0 0 var(--ink), 0 1px 0 var(--ink), 0 -1px 0 var(--ink)
-        }
-
-        .mosaic {
-            display: grid;
-            gap: 20px;
-            grid-template-columns: repeat(12, minmax(0, 1fr));
-            grid-auto-rows: 280px;
-            max-width: 1400px;
-            margin: 0 auto
-        }
-
-        .tile {
-            position: relative;
-            padding: 0;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            background: linear-gradient(135deg, #0f1118, #14151c);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, .55);
-            overflow: hidden;
-            transition: transform .3s ease, box-shadow .3s ease
-        }
-
-        .tile:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, .65)
-        }
-
-        .tile h3 {
-            margin: 0 0 8px;
-            font-family: 'Permanent Marker', system-ui;
-            font-size: clamp(22px, 4.5vw, 34px);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, .4);
-            padding: 0;
-        }
-
-        .tile p {
-            margin: 0 0 10px;
-            opacity: .9;
-            line-height: 1.5;
-            padding: 0;
-        }
-
-        /* Enhanced Grid Layout */
-        .t1 {
-            grid-column: 1 / span 5;
-            grid-row: 1 / span 2;
-        }
-
-        .t2 {
-            grid-column: 6 / span 3;
-            grid-row: 1 / span 1;
-        }
-
-        .t3 {
-            grid-column: 9 / span 4;
-            grid-row: 1 / span 2;
-        }
-
-        .t4 {
-            grid-column: 6 / span 3;
-            grid-row: 2 / span 1;
-        }
-
-        .t5 {
-            grid-column: 1 / span 4;
-            grid-row: 3 / span 1;
-        }
-
-        .t6 {
-            grid-column: 5 / span 4;
-            grid-row: 3 / span 1;
-        }
-
-        .t7 {
-            grid-column: 9 / span 4;
-            grid-row: 3 / span 1;
-        }
-
-        .t8 {
-            grid-column: 1 / span 12;
-            grid-row: 4 / span 1;
-        }
-
-        @media (max-width:1100px) {
-            .mosaic {
-                grid-template-columns: repeat(8, minmax(0, 1fr));
-                grid-auto-rows: 250px
-            }
-
-            .t1 {
-                grid-column: 1 / span 4;
-                grid-row: 1 / span 2;
-            }
-
-            .t2 {
-                grid-column: 5 / span 4;
-                grid-row: 1 / span 1;
-            }
-
-            .t3 {
-                grid-column: 5 / span 4;
-                grid-row: 2 / span 2;
-            }
-
-            .t4 {
-                grid-column: 1 / span 4;
-                grid-row: 3 / span 1;
-            }
-
-            .t5 {
-                grid-column: 1 / span 4;
-                grid-row: 4 / span 1;
-            }
-
-            .t6 {
-                grid-column: 5 / span 4;
-                grid-row: 4 / span 1;
-            }
-
-            .t7 {
-                grid-column: 1 / span 4;
-                grid-row: 5 / span 1;
-            }
-
-            .t8 {
-                grid-column: 1 / span 8;
-                grid-row: 5 / span 1;
-            }
-
-            .t10 {
-                grid-column: 5 / span 4;
-                grid-row: 6 / span 1;
-            }
-
-            .t11 {
-                grid-column: 1 / span 4;
-                grid-row: 7 / span 1;
-            }
-
-            .t12 {
-                grid-column: 5 / span 4;
-                grid-row: 7 / span 1;
-            }
-
-            .t13 {
-                grid-column: 1 / span 4;
-                grid-row: 8 / span 1;
-            }
-
-            .t14 {
-                grid-column: 5 / span 4;
-                grid-row: 8 / span 1;
-            }
-
-            .t15 {
-                grid-column: 1 / span 4;
-                grid-row: 9 / span 1;
-            }
-
-            .t16 {
-                grid-column: 5 / span 4;
-                grid-row: 9 / span 1;
-            }
-
-            .t17 {
-                grid-column: 1 / span 4;
-                grid-row: 10 / span 1;
-            }
-
-            .t18 {
-                grid-column: 5 / span 4;
-                grid-row: 10 / span 1;
-            }
-        }
-
-        @media (max-width:768px) {
-            .mosaic {
-                grid-template-columns: 1fr;
-                grid-auto-rows: 220px;
-                gap: 16px
-            }
-
-            .t1,
-            .t2,
-            .t3,
-            .t4,
-            .t5,
-            .t6,
-            .t7,
-            .t8,
-            .t10,
-            .t11,
-            .t12,
-            .t13,
-            .t14,
-            .t15,
-            .t16,
-            .t17,
-            .t18 {
-                grid-column: 1;
-                grid-row: auto
-            }
-        }
-
-        .pic-wrap {
-            position: absolute;
-            inset: 12px;
-            border-radius: 16px;
-            overflow: hidden;
-            padding: 0;
-            margin: 0;
-            background: rgba(0, 0, 0, .6);
-        }
-
-        .pic {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: contain;
-            object-position: center;
-            border: 0;
-            transition: transform .3s ease;
-            border-radius: 16px;
-        }
-
-        .tile:hover .pic {
-            transform: scale(1.08)
-        }
-
-        .review {
-            position: absolute;
-            inset: 0;
-            background: rgba(14, 17, 24, .85);
-            border: 0;
-            border-radius: 20px;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 72px 1fr;
-            gap: 14px;
-            align-items: center;
-            backdrop-filter: blur(10px)
-        }
-
-        .review img {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--border);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, .3)
-        }
-
-        .stars {
-            display: flex;
-            gap: 4px;
-            margin: 8px 0;
-            align-items: center
-        }
-
-        .stars svg {
-            width: 20px;
-            height: 20px;
-            fill: #ffd166;
-            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .4))
-        }
-
-        .rating-label {
-            margin-left: 8px;
-            font-weight: 700;
-            color: #ffd166;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, .4)
-        }
-
-        .r-name {
-            font-weight: 700;
-            color: var(--p-blue);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, .4)
-        }
-
-        .r-text {
-            opacity: .95;
-            font-style: italic;
-            line-height: 1.4
-        }
-
-        .t3 .video-container {
-            position: absolute;
-            inset: 0;
-            border: 0;
-            border-radius: 20px;
-            overflow: hidden;
-            background: #000;
-        }
-
-        .t3 .video-container iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-            display: block
-        }
-
-        .t3 .video-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, rgba(185, 200, 255, .1), rgba(225, 204, 255, .1));
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity .3s ease
-        }
-
-        .t3:hover .video-overlay {
-            opacity: 1
-        }
-
-        .t3 .video-badge {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            background: rgba(0, 0, 0, .8);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            z-index: 1;
-        }
-
-        .about-content {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 36px 48px;
-            text-align: center;
-        }
-
-        .about-content h3 {
-            margin-bottom: 16px;
-            color: var(--p-blue);
-            font-size: clamp(28px, 5vw, 42px);
-        }
-
-        .about-content p {
-            margin: 0;
-            max-width: 900px;
-            line-height: 1.7;
-            opacity: .95;
-            font-size: clamp(15px, 2vw, 18px);
-        }
-
-        /* Contact modal card */
-        .contact-card {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: min(560px, 92vw);
-            background: linear-gradient(180deg, rgba(16, 18, 26, .75), rgba(16, 18, 26, .6));
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 18px;
-            backdrop-filter: blur(12px) saturate(110%);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, .45), var(--glow);
-        }
-
-        .contact-title {
-            margin: 0 0 10px;
-            font-family: 'Permanent Marker', system-ui;
-            font-size: 28px;
-            letter-spacing: .02em
-        }
-
-        .contact-rows {
-            display: flex;
-            flex-direction: column;
-            gap: 10px
-        }
-
-        .c-row {
-            display: grid;
-            grid-template-columns: 28px 1fr;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border-radius: 12px;
-            transition: background .12s
-        }
-
-        .c-row:hover {
-            background: rgba(185, 200, 255, .10)
-        }
-
-        .c-ico {
-            width: 20px;
-            height: 20px;
-            color: #dfe4ff
-        }
-
-        .c-row a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 700
-        }
-
-        .contact-close {
-            position: absolute;
-            right: 12px;
-            top: 12px;
-            background: transparent;
-            border: 0;
-            color: #fff;
-            cursor: pointer;
-            font-size: 22px;
-            line-height: 1
-        }
-
-        /* Calendar styles */
-        .calendar-card {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: min(800px, 92vw);
-            max-height: 80vh;
-            background: linear-gradient(180deg, rgba(16, 18, 26, .75), rgba(16, 18, 26, .6));
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 18px;
-            backdrop-filter: blur(12px) saturate(110%);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, .45), var(--glow);
-            overflow: auto;
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .calendar-title {
-            margin: 0;
-            font-family: 'Permanent Marker', system-ui;
-            font-size: 28px;
-            letter-spacing: .02em;
-        }
-
-        .edit-btn {
-            padding: 8px 16px;
-            background: linear-gradient(135deg, var(--p-blue), var(--p-purple));
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: #0e0b16;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all .12s;
-        }
-
-        .edit-btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-        }
-
-        .calendar-events {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .event-item {
-            background: rgba(14, 17, 24, .6);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            gap: 12px;
-            align-items: center;
-            transition: all .12s;
-        }
-
-        .event-item:hover {
-            background: rgba(14, 17, 24, .85);
-            transform: translateX(4px);
-        }
-
-        .event-date {
-            background: var(--chip);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 8px 12px;
-            text-align: center;
-            min-width: 70px;
-        }
-
-        .event-month {
-            font-size: 12px;
-            opacity: .8;
-            text-transform: uppercase;
-        }
-
-        .event-day {
-            font-size: 24px;
-            font-weight: 700;
-            font-family: 'Permanent Marker', system-ui;
-            color: var(--p-blue);
-        }
-
-        .event-details h4 {
-            margin: 0 0 4px;
-            font-family: 'Permanent Marker', system-ui;
-            font-size: 18px;
-            color: var(--p-purple);
-        }
-
-        .event-details p {
-            margin: 0;
-            opacity: .9;
-            font-size: 14px;
-        }
-
-        .event-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .event-actions button {
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, .1);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all .12s;
-        }
-
-        .event-actions button:hover {
-            background: rgba(255, 255, 255, .2);
-        }
-
-        .event-actions button.delete {
-            background: rgba(255, 100, 100, .2);
-        }
-
-        .event-actions button.delete:hover {
-            background: rgba(255, 100, 100, .4);
-        }
-
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            max-width: 360px;
-            margin: 20px auto;
-            padding: 20px;
-            background: rgba(14, 17, 24, .8);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
-        }
-
-        .login-form h4 {
-            margin: 0 0 4px;
-            text-align: center;
-            font-family: 'Permanent Marker', system-ui;
-            font-size: 22px;
-            color: var(--p-blue);
-            letter-spacing: .02em;
-        }
-
-        .login-form p.subtitle {
-            margin: 0 0 12px;
-            text-align: center;
-            opacity: .7;
-            font-size: 13px;
-        }
-
-        .login-form input {
-            padding: 14px 16px;
-            background: rgba(0, 0, 0, .4);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: #fff;
-            font-size: 15px;
-            font-family: inherit;
-            transition: all .12s;
-        }
-
-        .login-form input:focus {
-            outline: none;
-            border-color: var(--p-blue);
-            box-shadow: 0 0 0 3px rgba(185, 200, 255, .15);
-        }
-
-        .login-form input::placeholder {
-            color: rgba(255, 255, 255, .4);
-        }
-
-        .login-form button {
-            padding: 14px;
-            background: linear-gradient(135deg, var(--p-blue), var(--p-purple));
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: #0e0b16;
-            font-weight: 700;
-            font-size: 15px;
-            cursor: pointer;
-            transition: all .12s;
-            font-family: 'Permanent Marker', system-ui;
-            letter-spacing: .02em;
-            box-shadow: 0 4px 12px rgba(185, 200, 255, .3);
-        }
-
-        .login-form button:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-            box-shadow: 0 6px 16px rgba(185, 200, 255, .4);
-        }
-
-        .add-event-form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: rgba(14, 17, 24, .6);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 16px;
-        }
-
-        .add-event-form input,
-        .add-event-form textarea {
-            padding: 10px;
-            background: rgba(0, 0, 0, .4);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 14px;
-            font-family: inherit;
-        }
-
-        .add-event-form textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
-
-        .add-event-form button {
-            padding: 10px;
-            background: linear-gradient(135deg, var(--p-purple), var(--p-blue));
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: #0e0b16;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all .12s;
-        }
-
-        .add-event-form button:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Additional tile layouts */
-        .t10 {
-            grid-column: 7 / span 6;
-            grid-row: 5 / span 1;
-        }
-
-        .t11 {
-            grid-column: 1 / span 3;
-            grid-row: 6 / span 1;
-        }
-
-        .t12 {
-            grid-column: 4 / span 3;
-            grid-row: 6 / span 1;
-        }
-
-        .t13 {
-            grid-column: 7 / span 3;
-            grid-row: 6 / span 1;
-        }
-
-        .t14 {
-            grid-column: 10 / span 3;
-            grid-row: 6 / span 1;
-        }
-
-        .t15 {
-            grid-column: 1 / span 4;
-            grid-row: 7 / span 1;
-        }
-
-        .t16 {
-            grid-column: 5 / span 4;
-            grid-row: 7 / span 1;
-        }
-
-        .t17 {
-            grid-column: 9 / span 4;
-            grid-row: 7 / span 1;
-        }
-
-        .t18 {
-            grid-column: 1 / span 12;
-            grid-row: 8 / span 1;
-        }
-
-        /* Reveal animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px) scale(.95);
-            transition: 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94)
-        }
-
-        .reveal.in {
-            opacity: 1;
-            transform: none
-        }
-
-        .reveal:nth-child(even) {
-            transition-delay: 100ms
-        }
-
-        .reveal:nth-child(3n) {
-            transition-delay: 200ms
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>David Burrows — Comedian</title>
+<meta name="description" content="David Burrows is a stand-up comedian performing across the tri-state area. Tour dates, reel, and booking." />
+
+<!-- Preload heroes -->
+<link rel="preload" as="image" href="./dbai.png" media="(min-width: 769px)" />
+<link rel="preload" as="image" href="./dbmobile.png" media="(max-width: 768px)" />
+
+<!-- Fonts: editorial serif + a comedy display + clean sans -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=Permanent+Marker&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{height:100%}
+body{
+  margin:0;
+  background:#0a0a0a;
+  color:#f5f1ea;
+  font-family:'DM Sans',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+img{display:block;max-width:100%}
+a{color:inherit}
+
+:root{
+  --bg:#0b0906;
+  --bg-2:#14100a;
+  --paper:#f7f1e3;
+  --ink:#1a1a1a;
+  --accent:#cda15a;        /* brushed gold */
+  --accent-soft:#e8ca92;
+  --rule:rgba(232,202,146,.22);
+  --rule-strong:rgba(232,202,146,.45);
+  --edge:clamp(20px,5vw,72px);
+  --maxw:1240px;
+  --display:'Permanent Marker',system-ui;
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--edge)}
+
+/* ===================== HERO ===================== */
+.hero{
+  position:relative;
+  min-height:100svh;
+  background:#000 center 30%/cover no-repeat url("./dbai.png");
+  overflow:hidden;
+  isolation:isolate;
+}
+.hero::after{
+  content:"";
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 50% 20%, transparent 0%, rgba(0,0,0,.55) 75%),
+    linear-gradient(to bottom, transparent 55%, rgba(0,0,0,.85) 100%);
+}
+@media (max-width:768px){
+  .hero{background-image:url("./dbmobile.png");background-position:center 38%}
+}
+
+.topbar{
+  position:absolute;top:0;left:0;right:0;z-index:3;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px var(--edge);
+  padding-top:max(24px,env(safe-area-inset-top));
+}
+.brand{
+  display:inline-flex;align-items:center;gap:14px;
+  text-decoration:none;color:#fff;
+}
+.brand img{
+  width:54px;height:54px;border-radius:50%;
+  border:2px solid #fff;object-fit:cover;
+  box-shadow:0 6px 20px rgba(0,0,0,.5);
+}
+.brand-name{
+  font-family:var(--display);
+  font-size:20px;letter-spacing:.04em;
+  text-transform:uppercase;
+  text-shadow:0 2px 8px rgba(0,0,0,.6);
+}
+
+.nav{display:flex;align-items:center;gap:8px}
+.nav a,.nav button{
+  font-family:var(--sans);
+  font-size:13px;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#fff;background:transparent;border:0;
+  padding:10px 14px;border-radius:999px;
+  cursor:pointer;text-decoration:none;
+  transition:background .15s,color .15s;
+}
+.nav a:hover,.nav button:hover{background:rgba(255,255,255,.12)}
+.nav .cta{
+  background:var(--accent);color:#fff;
+  padding:10px 18px;
+}
+.nav .cta:hover{background:var(--accent-soft);color:#1b140a}
+
+@media (max-width:720px){
+  .nav a:not(.cta){display:none}
+}
+
+.hero-foot{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  padding:0 var(--edge) calc(40px + env(safe-area-inset-bottom));
+}
+.hero-foot-inner{
+  max-width:var(--maxw);margin:0 auto;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+  flex-wrap:wrap;
+}
+.hero-tag{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(14px,1.6vw,18px);
+  color:rgba(255,255,255,.85);
+  max-width:38ch;line-height:1.5;
+  text-shadow:0 2px 12px rgba(0,0,0,.6);
+}
+.hero-tag em{color:#fff;font-weight:600;font-style:italic}
+.hero-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.hero-action{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.34);
+  background:rgba(10,10,10,.5);
+  color:#fff;
+  text-decoration:none;
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  transition:background .15s,border-color .15s,color .15s,transform .15s;
+}
+.hero-action:hover{
+  background:rgba(255,255,255,.12);
+  border-color:#fff;
+  transform:translateY(-1px);
+}
+.hero-action.primary{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#1b140a;
+}
+.hero-action.primary:hover{
+  background:var(--accent-soft);
+  border-color:var(--accent-soft);
+}
+.scroll-hint{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.7);
+  text-decoration:none;
+}
+.scroll-hint .line{width:36px;height:1px;background:rgba(255,255,255,.5)}
+
+.socials{display:flex;gap:14px}
+.socials a{
+  display:inline-flex;width:34px;height:34px;
+  align-items:center;justify-content:center;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.3);
+  color:#fff;
+  transition:background .15s,border-color .15s,transform .15s;
+}
+.socials a:hover{background:rgba(255,255,255,.15);border-color:#fff;transform:translateY(-2px)}
+.socials svg{width:15px;height:15px}
+
+@media (max-width:720px){
+  .hero-foot-inner{
+    display:grid;
+    grid-template-columns:1fr;
+    align-items:start;
+    gap:16px;
+  }
+  .hero-actions{gap:8px}
+  .hero-action{padding:9px 13px;font-size:10px}
+  .scroll-hint{display:none}
+}
+
+/* ===================== SECTIONS ===================== */
+section{padding:clamp(72px,10vw,140px) 0;position:relative}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:var(--sans);
+  font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:18px;
+}
+.eyebrow::before{
+  content:"";width:32px;height:1px;background:var(--accent);
+}
+.section-title{
+  font-family:var(--serif);
+  font-weight:400;
+  font-size:clamp(40px,7vw,84px);
+  line-height:1;
+  letter-spacing:-0.02em;
+  margin:0 0 24px;
+  color:var(--paper);
+}
+.section-title em{
+  font-style:italic;font-weight:400;color:var(--accent);
+}
+.section-lede{
+  font-family:var(--serif);
+  font-size:clamp(18px,2vw,22px);
+  line-height:1.5;
+  max-width:62ch;
+  color:rgba(245,241,234,.8);
+  margin:0 0 56px;
+}
+
+/* ===================== ABOUT ===================== */
+#about{background:linear-gradient(180deg,#0a0a0a 0%,#0d0d0d 100%)}
+.about-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:clamp(40px,6vw,96px);
+  align-items:center;
+}
+@media (max-width:880px){.about-grid{grid-template-columns:1fr}}
+.about-portrait{
+  aspect-ratio:4/5;
+  overflow:hidden;
+  border-radius:4px;
+  position:relative;
+  background:#1a1a1a;
+}
+.about-portrait img{
+  width:100%;height:100%;object-fit:cover;
+  filter:contrast(1.05) saturate(.95);
+}
+.about-portrait::after{
+  content:"";position:absolute;inset:0;
+  box-shadow:inset 0 0 80px rgba(0,0,0,.4);
+  pointer-events:none;
+}
+.about-copy p{
+  font-family:var(--serif);
+  font-size:clamp(17px,1.8vw,20px);
+  line-height:1.6;
+  margin:0 0 20px;
+  color:rgba(245,241,234,.88);
+}
+.about-copy p:first-of-type::first-letter{
+  font-size:3.2em;float:left;line-height:.85;
+  padding:6px 12px 0 0;font-weight:600;
+  color:var(--accent);font-family:var(--serif);
+}
+.about-stats{
+  margin-top:40px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:24px;
+  border-top:1px solid var(--rule);
+  padding-top:32px;
+}
+.stat-num{
+  font-family:var(--display);
+  font-size:clamp(28px,4vw,42px);
+  color:var(--accent);
+  line-height:1;
+}
+.stat-label{
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(245,241,234,.6);
+  margin-top:8px;
+}
+
+/* ===================== REEL ===================== */
+#reel{background:#000}
+.reel-wrap{
+  position:relative;
+  aspect-ratio:16/9;
+  border-radius:6px;
+  overflow:hidden;
+  background:#000;
+  border:1px solid var(--rule);
+}
+.reel-wrap iframe{width:100%;height:100%;border:0;display:block}
+.reel-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:20px;
+  font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(245,241,234,.6);
+}
+.reel-meta .live{
+  display:inline-flex;align-items:center;gap:8px;
+  color:var(--accent);
+}
+.reel-meta .live::before{
+  content:"";width:8px;height:8px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 0 var(--accent);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(205,161,90,.6)}
+  70%{box-shadow:0 0 0 10px rgba(205,161,90,0)}
+  100%{box-shadow:0 0 0 0 rgba(205,161,90,0)}
+}
+
+/* ===================== TESTIMONIALS ===================== */
+#praise{background:linear-gradient(180deg,#0d0d0d 0%,#0a0a0a 100%)}
+.praise-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+@media (max-width:920px){.praise-grid{grid-template-columns:1fr}}
+.quote{
+  position:relative;
+  padding:36px 32px 32px;
+  background:#0f0f0f;
+  border:1px solid var(--rule);
+  border-radius:4px;
+  display:flex;flex-direction:column;
+  min-height:280px;
+}
+.quote::before{
+  content:"“";
+  position:absolute;top:-8px;left:24px;
+  font-family:var(--serif);
+  font-size:96px;line-height:1;
+  color:var(--accent);
+  opacity:.9;
+}
+.quote-text{
+  font-family:var(--serif);
+  font-size:clamp(17px,1.6vw,20px);
+  line-height:1.5;
+  color:var(--paper);
+  margin:24px 0 auto;
+  font-style:italic;
+}
+.quote-attr{
+  margin-top:32px;
+  padding-top:20px;
+  border-top:1px solid var(--rule);
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;
+}
+.quote-name{
+  font-family:var(--sans);font-weight:700;font-size:13px;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--paper);
+}
+.quote-role{
+  font-size:12px;color:rgba(245,241,234,.55);
+  margin-top:2px;letter-spacing:.04em;
+}
+.quote-stars{display:inline-flex;gap:2px}
+.quote-stars svg{width:14px;height:14px;fill:var(--accent)}
+
+/* ===================== TOUR ===================== */
+#tour{background:#0a0a0a}
+.tour-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  flex-wrap:wrap;gap:24px;
+  margin-bottom:48px;
+}
+.tour-head .section-title{margin:0}
+.tour-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn-ghost,.btn-solid{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 20px;
+  font-family:var(--sans);font-size:12px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  border-radius:999px;cursor:pointer;
+  text-decoration:none;
+  transition:transform .15s,background .15s,color .15s;
+  border:1px solid var(--rule-strong);
+}
+.btn-ghost{background:transparent;color:var(--paper)}
+.btn-ghost:hover{background:rgba(245,241,234,.08);transform:translateY(-1px)}
+.btn-solid{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-solid:hover{background:#ff6948;transform:translateY(-1px)}
+
+.tour-list{display:flex;flex-direction:column}
+.tour-row{
+  display:grid;
+  grid-template-columns:140px 1fr auto;
+  gap:32px;align-items:center;
+  padding:28px 0;
+  border-top:1px solid var(--rule);
+  transition:padding .2s;
+}
+.tour-row:last-child{border-bottom:1px solid var(--rule)}
+.tour-row:hover{padding-left:8px}
+.tour-date{
+  font-family:var(--display);
+  color:var(--accent);
+}
+.tour-date .day{font-size:clamp(28px,3vw,36px);line-height:1;letter-spacing:.02em}
+.tour-date .month{font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin-top:4px;color:rgba(245,241,234,.6);font-family:var(--sans);font-weight:500}
+.tour-info h3{
+  margin:0 0 4px;
+  font-family:var(--serif);
+  font-size:clamp(20px,2.2vw,26px);
+  font-weight:600;
+  line-height:1.2;
+}
+.tour-info .where{
+  font-size:14px;color:rgba(245,241,234,.7);
+}
+.tour-go{
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(245,241,234,.6);
+  display:inline-flex;align-items:center;gap:8px;
+  text-decoration:none;
+  cursor:pointer;
+  background:transparent;border:0;
+  font-family:var(--sans);font-weight:500;
+}
+.tour-go:hover{color:var(--accent)}
+.tour-go .arrow{
+  display:inline-block;transition:transform .2s;
+}
+.tour-row:hover .tour-go .arrow{transform:translateX(4px)}
+
+@media (max-width:680px){
+  .tour-row{grid-template-columns:90px 1fr;gap:20px}
+  .tour-go{grid-column:1/-1;justify-content:flex-end}
+}
+
+.empty-tour{
+  text-align:center;padding:60px 20px;
+  font-family:var(--serif);font-style:italic;
+  color:rgba(245,241,234,.5);
+  border:1px dashed var(--rule);
+  border-radius:4px;
+}
+
+/* ===================== GALLERY ===================== */
+#gallery{background:#0d0d0d}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:12px;
+  grid-auto-rows:160px;
+}
+.gallery-item{
+  overflow:hidden;
+  background:#1a1a1a;
+  border-radius:2px;
+  position:relative;
+  cursor:pointer;
+}
+.gallery-item img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1),filter .3s;
+  filter:saturate(.9);
+}
+.gallery-item:hover img{transform:scale(1.06);filter:saturate(1.1)}
+.gallery-item::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.4));
+  opacity:0;transition:opacity .3s;
+}
+.gallery-item:hover::after{opacity:1}
+
+.g1{grid-column:span 6;grid-row:span 2}
+.g2{grid-column:span 3;grid-row:span 2}
+.g3{grid-column:span 3;grid-row:span 2}
+.g4{grid-column:span 4;grid-row:span 2}
+.g5{grid-column:span 4;grid-row:span 2}
+.g6{grid-column:span 4;grid-row:span 2}
+.g7{grid-column:span 6;grid-row:span 2}
+.g8{grid-column:span 3;grid-row:span 2}
+.g9{grid-column:span 3;grid-row:span 2}
+
+@media (max-width:900px){
+  .gallery-grid{grid-template-columns:repeat(6,1fr);grid-auto-rows:140px}
+  .g1,.g2,.g3,.g4,.g5,.g6,.g7,.g8,.g9{grid-column:span 3;grid-row:span 2}
+  .g1{grid-column:span 6}
+}
+@media (max-width:560px){
+  .gallery-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:160px}
+  .g1,.g2,.g3,.g4,.g5,.g6,.g7,.g8,.g9{grid-column:span 1;grid-row:span 1}
+  .g1{grid-column:span 2;grid-row:span 2}
+}
+
+/* ===================== BOOK ===================== */
+#book{
+  background:var(--paper);
+  color:var(--ink);
+  text-align:center;
+}
+#book .section-title{color:var(--ink)}
+#book .section-title em{color:var(--accent)}
+#book .eyebrow{color:var(--accent)}
+#book .eyebrow::before{background:var(--accent)}
+.book-lede{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(18px,2vw,22px);
+  max-width:50ch;margin:0 auto 40px;
+  color:rgba(26,26,26,.75);
+}
+.book-cta{
+  display:inline-flex;align-items:center;gap:14px;
+  padding:20px 36px;
+  background:var(--ink);color:var(--paper);
+  font-family:var(--display);
+  font-size:22px;letter-spacing:.04em;text-transform:uppercase;
+  text-decoration:none;border-radius:999px;
+  transition:transform .2s,background .2s;
+}
+.book-cta:hover{background:var(--accent);transform:translateY(-3px)}
+.book-cta svg{width:20px;height:20px}
+
+/* ===================== FOOTER ===================== */
+footer{
+  padding:60px var(--edge) 40px;
+  border-top:1px solid var(--rule);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:20px;
+  font-size:12px;color:rgba(245,241,234,.5);
+  letter-spacing:.06em;
+}
+footer .foot-brand{
+  font-family:var(--display);
+  color:var(--paper);
+  font-size:16px;letter-spacing:.08em;text-transform:uppercase;
+}
+
+/* ===================== MODAL ===================== */
+.modal{
+  position:fixed;inset:0;z-index:50;
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal.show{display:flex}
+.modal-card{
+  background:#0f0f0f;
+  border:1px solid var(--rule-strong);
+  border-radius:6px;
+  padding:36px;
+  max-width:560px;width:100%;
+  position:relative;
+  max-height:90vh;overflow:auto;
+}
+.modal-card.lg{max-width:1080px}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  width:36px;height:36px;border-radius:50%;
+  background:transparent;border:1px solid var(--rule);
+  color:var(--paper);cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:18px;
+  transition:background .15s,transform .15s;
+}
+.modal-close:hover{background:rgba(255,255,255,.1);transform:rotate(90deg)}
+.modal-title{
+  font-family:var(--serif);font-weight:600;
+  font-size:32px;margin:0 0 24px;
+}
+
+/* Contact */
+.c-row{
+  display:flex;align-items:center;gap:16px;
+  padding:16px;border-radius:4px;
+  border:1px solid var(--rule);
+  margin-bottom:10px;
+  text-decoration:none;color:var(--paper);
+  transition:background .15s,border-color .15s;
+}
+.c-row:hover{background:rgba(205,161,90,.08);border-color:var(--accent)}
+.c-row svg{width:20px;height:20px;color:var(--accent);flex-shrink:0}
+.c-row .c-label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,241,234,.6)}
+.c-row .c-value{font-family:var(--serif);font-size:17px;margin-top:2px}
+
+/* Calendar modal */
+.cal-toolbar{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;margin-bottom:24px;
+}
+.cal-nav-btns{display:inline-flex;gap:6px;align-items:center}
+.cal-btn{
+  padding:8px 14px;background:transparent;
+  border:1px solid var(--rule);border-radius:999px;
+  color:var(--paper);font-family:var(--sans);font-size:12px;
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+  transition:background .15s;
+}
+.cal-btn:hover{background:rgba(255,255,255,.08)}
+.cal-btn.arrow{width:36px;height:36px;padding:0;display:inline-flex;align-items:center;justify-content:center}
+.cal-monthlabel{
+  font-family:var(--display);
+  font-size:24px;color:var(--accent);
+  margin:0 12px;letter-spacing:.04em;
+  min-width:160px;text-align:center;
+}
+.view-toggle{
+  display:inline-flex;gap:0;
+  border:1px solid var(--rule);border-radius:999px;overflow:hidden;
+}
+.view-toggle button{
+  padding:8px 14px;background:transparent;border:0;
+  color:var(--paper);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;cursor:pointer;font-family:var(--sans);font-weight:500;
+}
+.view-toggle button.active{background:var(--accent);color:#fff}
+
+.cal-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:4px;
+  background:rgba(255,255,255,.04);border:1px solid var(--rule);
+  border-radius:4px;padding:6px;
+}
+.cal-dow{
+  text-align:center;font-size:10px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(245,241,234,.5);padding:8px 4px;
+}
+.cal-day{
+  min-height:80px;background:rgba(0,0,0,.4);
+  border:1px solid transparent;border-radius:3px;
+  padding:6px;cursor:pointer;display:flex;flex-direction:column;gap:3px;
+  transition:background .12s,border-color .12s;
+  overflow:hidden;
+}
+.cal-day:hover{background:rgba(205,161,90,.12);border-color:var(--rule)}
+.cal-day.other-month{opacity:.3}
+.cal-day.today .cal-daynum{background:var(--accent);color:#fff;font-weight:700}
+.cal-day.selected{border-color:var(--accent)}
+.cal-daynum{
+  align-self:flex-start;font-size:12px;font-weight:600;
+  min-width:22px;height:22px;line-height:22px;padding:0 6px;
+  border-radius:11px;text-align:center;color:var(--paper);
+}
+.cal-evt{
+  font-size:10px;line-height:1.2;padding:2px 5px;border-radius:3px;
+  background:rgba(205,161,90,.2);border:1px solid rgba(205,161,90,.35);
+  color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cal-evt.more{background:transparent;border:0;opacity:.6;font-weight:600;padding:0 4px}
+
+.cal-daypanel{
+  margin-top:18px;padding:18px;
+  background:rgba(0,0,0,.4);border:1px solid var(--rule);
+  border-radius:4px;
+}
+.cal-daypanel h4{
+  margin:0 0 12px;font-family:var(--serif);font-weight:600;
+  font-size:18px;color:var(--accent);
+}
+.cal-daypanel .empty{opacity:.6;font-size:13px;font-style:italic;margin:0;font-family:var(--serif)}
+.day-evt{
+  display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;
+  padding:14px;background:rgba(255,255,255,.03);
+  border:1px solid var(--rule);border-radius:4px;margin-bottom:8px;
+}
+.day-evt:last-child{margin-bottom:0}
+.day-evt h5{
+  margin:0 0 2px;font-family:var(--serif);font-weight:600;
+  font-size:16px;color:var(--paper);
+}
+.day-evt p{margin:0;font-size:13px;color:rgba(245,241,234,.7)}
+.day-del{
+  padding:6px 10px;background:rgba(205,161,90,.15);
+  border:1px solid rgba(205,161,90,.3);border-radius:4px;
+  color:var(--paper);font-size:11px;cursor:pointer;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.day-del:hover{background:rgba(205,161,90,.3)}
+
+.agenda-list{display:flex;flex-direction:column;gap:10px}
+.agenda-item{
+  display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;
+  padding:16px;background:rgba(0,0,0,.4);
+  border:1px solid var(--rule);border-radius:4px;
+}
+.agenda-date{
+  text-align:center;min-width:60px;
+  padding-right:16px;border-right:1px solid var(--rule);
+}
+.agenda-date .m{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,241,234,.6)}
+.agenda-date .d{font-family:var(--display);font-size:26px;color:var(--accent);line-height:1;margin-top:2px}
+.agenda-info h5{margin:0 0 2px;font-family:var(--serif);font-weight:600;font-size:17px}
+.agenda-info p{margin:0;font-size:13px;color:rgba(245,241,234,.7)}
+
+.login-form{
+  display:flex;flex-direction:column;gap:12px;
+  padding:20px;background:rgba(0,0,0,.4);
+  border:1px solid var(--rule);border-radius:4px;
+  margin-bottom:20px;
+}
+.login-form h4{
+  margin:0;font-family:var(--serif);font-weight:600;font-size:18px;
+}
+.login-form .sub{margin:0;font-size:12px;color:rgba(245,241,234,.6);letter-spacing:.04em}
+.login-form input,.add-form input,.add-form textarea{
+  padding:12px 14px;background:rgba(0,0,0,.5);
+  border:1px solid var(--rule);border-radius:4px;
+  color:var(--paper);font-family:var(--sans);font-size:14px;
+  transition:border-color .15s;
+}
+.login-form input:focus,.add-form input:focus,.add-form textarea:focus{
+  outline:none;border-color:var(--accent);
+}
+.add-form{
+  display:flex;flex-direction:column;gap:10px;
+  padding:18px;background:rgba(0,0,0,.4);
+  border:1px solid var(--rule);border-radius:4px;
+  margin-bottom:18px;
+}
+.add-form h4{margin:0 0 4px;font-family:var(--serif);font-weight:600;font-size:16px}
+.add-form textarea{resize:vertical;min-height:60px;font-family:var(--sans)}
+
+.hidden{display:none !important}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* Selection */
+::selection{background:var(--accent);color:#fff}
+</style>
 </head>
-
 <body>
 
-    <!-- HERO -->
-    <header class="hero">
-        <a class="brand" href="/" aria-label="Home">
-            <img class="brand-logo" src="./db-logo.svg" alt="David Burrows logo"
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <span class="word">DB</span>
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="topbar">
+    <a class="brand" href="#top" aria-label="David Burrows — Home">
+      <img src="./real logo 1.JPEG" alt="" width="54" height="54">
+      <span class="brand-name">D. Burrows</span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#tour">Tour</a>
+      <a href="#gallery">Photos</a>
+      <a href="https://shopsobrietyrules.com/" target="_blank" rel="noopener">Shop</a>
+      <button id="openContact" class="cta">Book</button>
+    </nav>
+  </div>
+
+  <div class="hero-foot">
+    <div class="hero-foot-inner">
+      <p class="hero-tag">
+        Stand-up. <em>Tri-state nights.</em><br>
+        Live, loud, and unbothered by your aux cord.
+      </p>
+      <div class="hero-actions" aria-label="Quick actions">
+        <a class="hero-action" href="#about">Info</a>
+        <a class="hero-action" href="#praise">Testimonials</a>
+        <a class="hero-action" href="#gallery">Images</a>
+        <button class="hero-action" id="openCalendarHero">Agenda</button>
+        <button class="hero-action primary" id="openContactHero">Book</button>
+      </div>
+      <a href="#about" class="scroll-hint" aria-label="Scroll down">
+        <span class="line"></span> Scroll
+      </a>
+      <div class="socials" aria-label="Socials">
+        <a href="https://www.instagram.com/dbcomedy14/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="18" cy="6" r="1"></circle></svg>
         </a>
-
-        <div class="bottom">
-            <nav class="menu" aria-label="Primary">
-                <a href="#shows" id="openShows">Shows</a>
-                <a href="#highlights">Highlights</a>
-                <a href="#shop" id="openShop">Shop</a>
-                <button id="openContact">Contact</button>
-                <button id="openCalendar">Calendar</button>
-            </nav>
-            <div class="socials" aria-label="Socials">
-                <a href="https://www.instagram.com/dbcomedy14/" target="_blank" rel="noopener" aria-label="Instagram">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                        <circle cx="12" cy="12" r="4"></circle>
-                        <circle cx="18" cy="6" r="1"></circle>
-                    </svg>
-                </a>
-                <a href="https://www.tiktok.com/@dbcomedy14?_t=ZT-8yjyCl2pKnu&_r=1" target="_blank" rel="noopener"
-                    aria-label="TikTok">
-                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M12.8 3a6.6 6.6 0 0 0 4.9 2.1V8A9.3 9.3 0 0 1 14 6.7v6.7a5.4 5.4 0 1 1-5.4-5.4c.3 0 .7 0 1 .1V10a2.9 2.9 0 1 0 2 2.7V3h1.2Z" />
-                    </svg>
-                </a>
-                <a href="https://www.youtube.com/@DBcomedy_14" target="_blank" rel="noopener" aria-label="YouTube">
-                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12c0 2.1.2 4.2.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.3-1.6.5-3.7.5-5.8 0-2.1-.2-4.2-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z"/>
-                    </svg>
-                </a>
-                <a href="https://www.facebook.com/david.burrows.975910?mibextid=wwXIfr&rdid=1VwF1fh14W0rzOJF&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1DB9iXHY83%2F%3Fmibextid%3DwwXIfr" target="_blank" rel="noopener" aria-label="Facebook">
-                    <svg class="icon" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M24 12.1c0-6.6-5.4-12-12-12S0 5.5 0 12.1c0 6 4.4 11 10.1 11.9v-8.4H7.1v-3.5h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9v2.3h3.4l-.5 3.5h-2.9v8.4c5.7-.9 10.1-5.9 10.1-11.9z"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
-
-        <div id="overlay" class="overlay" aria-hidden="true"></div>
-
-        <!-- Shows overlay -->
-        <div id="showsPage" class="page" aria-label="Shows">
-            <button class="close" id="closeShows">← Back</button>
-            <h2 class="title">Shows</h2>
-            <div class="scroll">
-                <div id="showsGrid" class="grid" aria-live="polite"></div>
-            </div>
-        </div>
-
-        <!-- Shop overlay -->
-        <div id="shopPage" class="page" aria-label="Shop">
-            <button class="close" id="closeShop">← Back</button>
-            <h2 class="title">Shop</h2>
-            <div class="scroll" style="display:grid;place-items:center">
-                <div class="card" style="max-width:560px;">
-                    <img class="thumb" src="./dbai.png" alt="Coming soon" loading="lazy">
-                    <div class="body">
-                        <div class="h3">Coming Soon</div>
-                        <div class="meta">Merch and more on the way. Follow for updates.</div>
-                        <div class="actions">
-                            <a class="btn" href="https://www.instagram.com/dbcomedy14/" target="_blank"
-                                rel="noopener">Follow</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contact modal -->
-        <div id="contactModal" class="modal" aria-label="Contact">
-            <button class="close" id="closeContact">← Back</button>
-            <div class="contact-card" role="dialog" aria-modal="true">
-                <button class="contact-close" id="xContact" aria-label="Close">✕</button>
-                <h3 class="contact-title">Contact</h3>
-                <div class="contact-rows">
-                    <div class="c-row">
-                        <svg class="c-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1A19.3 19.3 0 0 1 4.2 10.8 19.8 19.8 0 0 1 1.1 2.2 2 2 0 0 1 3 0h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8l-1.3 1.3a16 16 0 0 0 6.8 6.8l1.3-1.3a2 2 0 0 1 1.8-.6l3 .5A2 2 0 0 1 22 16.9z" />
-                        </svg>
-                        <a href="sms:+17323951102">Text: +1&nbsp;732&nbsp;395&nbsp;1102</a>
-                    </div>
-                    <div class="c-row">
-                        <svg class="c-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
-                            <path d="m22 6-10 7L2 6" />
-                        </svg>
-                        <a href="mailto:antmoreno1000@gmail.com">Email: antmoreno1000@gmail.com</a>
-                    </div>
-                    <div class="c-row">
-                        <svg class="c-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                            <circle cx="12" cy="12" r="4" />
-                            <circle cx="18" cy="6" r="1" />
-                        </svg>
-                        <a href="https://www.instagram.com/anthonymoreno__/" target="_blank" rel="noopener">DM:
-                            @anthonymoreno__</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Calendar modal -->
-        <div id="calendarModal" class="modal" aria-label="Calendar">
-            <button class="close" id="closeCalendar">← Back</button>
-            <div class="calendar-card" role="dialog" aria-modal="true">
-                <button class="contact-close" id="xCalendar" aria-label="Close">✕</button>
-                <div class="calendar-header">
-                    <h3 class="calendar-title">Upcoming Shows</h3>
-                    <button class="edit-btn" id="editBtn">Edit</button>
-                </div>
-
-                <!-- Login Form (hidden by default) -->
-                <div id="loginForm" class="login-form hidden">
-                    <h4>Admin Access</h4>
-                    <p class="subtitle">Enter password to manage events</p>
-                    <input type="password" id="loginPassword" placeholder="Enter password" required>
-                    <button id="loginSubmit">Unlock</button>
-                    <p id="loginError" style="color: #ff6b6b; text-align: center; margin: 8px 0 0; font-size: 13px; display: none;"></p>
-                </div>
-
-                <!-- Add Event Form (hidden by default) -->
-                <div id="addEventForm" class="add-event-form hidden">
-                    <h4 style="margin: 0 0 8px;">Add New Event</h4>
-                    <input type="date" id="eventDate" placeholder="Date" required>
-                    <input type="text" id="eventTitle" placeholder="Event Title" required>
-                    <input type="text" id="eventLocation" placeholder="Location" required>
-                    <textarea id="eventDescription" placeholder="Description (optional)"></textarea>
-                    <button id="addEventBtn">Add Event</button>
-                </div>
-
-                <!-- Calendar Events List -->
-                <div id="calendarEvents" class="calendar-events">
-                    <!-- Events will be rendered here -->
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- ===== HIGHLIGHTS ===== -->
-    <section class="section" id="highlights">
-        <h2>Highlights</h2>
-        <div class="mosaic">
-            <!-- Main Stage Photo -->
-            <article class="tile t1 reveal" aria-label="Stage Performance">
-                <div class="pic-wrap">
-                    <img class="pic" src="./db.png" alt="David performing on stage" loading="lazy">
-                </div>
-            </article>
-
-            <!-- Testimonial #1 -->
-            <article class="tile t2 reveal" aria-label="Review: Comedy Club Manager">
-                <div class="review">
-                    <img src="https://images.pexels.com/photos/2770600/pexels-photo-2770600.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1"
-                        alt="Club manager headshot" loading="lazy">
-                    <div>
-                        <div class="r-name">Comedy Club Manager</div>
-                        <div class="stars" aria-label="5 out of 5 stars">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <span class="rating-label">5.0</span>
-                        </div>
-                        <div class="r-text">"Crowd loved him — clean, quick, and knows how to work a room perfectly."
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Enhanced Video Section -->
-            <article class="tile t3 reveal" aria-label="Performance Reel">
-                <div class="video-container">
-                    <iframe
-                        src="https://www.youtube.com/embed/ds_Sg2BIWs4?autoplay=1&mute=1&controls=1&rel=0&playsinline=1&modestbranding=1&loop=1&playlist=ds_Sg2BIWs4"
-                        title="David Burrows Comedy Reel" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                        allow="autoplay; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen></iframe>
-                </div>
-                <div class="video-overlay"></div>
-                <div class="video-badge">🎬 LIVE SET</div>
-            </article>
-
-            <!-- Testimonial #2 -->
-            <article class="tile t4 reveal" aria-label="Review: Event Producer">
-                <div class="review">
-                    <img src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1"
-                        alt="Event producer headshot" loading="lazy">
-                    <div>
-                        <div class="r-name">Event Producer</div>
-                        <div class="stars" aria-label="4.5 out of 5 stars">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24" style="fill: url(#halfGrad)">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <span class="rating-label">4.5</span>
-                        </div>
-                        <div class="r-text">"Professional, punctual, and incredibly funny. Booked him again
-                            immediately."</div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Cowboy Photo -->
-            <article class="tile t5 reveal" aria-label="Cowboy Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./cowboy.JPG" alt="David in cowboy attire" loading="lazy">
-                </div>
-            </article>
-
-            <!-- Testimonial #3 -->
-            <article class="tile t6 reveal" aria-label="Review: College Coordinator">
-                <div class="review">
-                    <img src="https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1"
-                        alt="College coordinator headshot" loading="lazy">
-                    <div>
-                        <div class="r-name">College Coordinator</div>
-                        <div class="stars" aria-label="5 out of 5 stars">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <svg viewBox="0 0 24 24">
-                                <path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z" />
-                            </svg>
-                            <span class="rating-label">5.0</span>
-                        </div>
-                        <div class="r-text">"Students wouldn't stop laughing! Best comedian we've had in years."</div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Coco Photo -->
-            <article class="tile t7 reveal" aria-label="Coco Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./coco.JPG" alt="David with Coco" loading="lazy">
-                </div>
-            </article>
-
-            <!-- About Me - Enhanced -->
-            <article class="tile t8 reveal" aria-label="About David">
-                <div class="about-content">
-                    <h3>About Me</h3>
-                    <p>David Burrows is a dynamic stand-up comedian bringing high-energy performances to venues across
-                        the tri-state area. Known for his razor-sharp crowd work, engaging storytelling, and perfectly
-                        timed one-liners, David creates an unforgettable experience that keeps audiences coming back for
-                        more.</p>
-                </div>
-            </article>
-
-            <!-- Additional Photos -->
-            <article class="tile t10 reveal" aria-label="Performance Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./D B1.jpeg" alt="David performing" loading="lazy">
-                </div>
-            </article>
-
-            <article class="tile t11 reveal" aria-label="Performance Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./D B2.jpeg" alt="David performing" loading="lazy">
-                </div>
-            </article>
-
-            <article class="tile t12 reveal" aria-label="Performance Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./D B3.jpeg" alt="David performing" loading="lazy">
-                </div>
-            </article>
-
-            <article class="tile t13 reveal" aria-label="Performance Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./D B4.jpeg" alt="David performing" loading="lazy">
-                </div>
-            </article>
-
-            <article class="tile t14 reveal" aria-label="Performance Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./D B5.jpeg" alt="David performing" loading="lazy">
-                </div>
-            </article>
-
-            <article class="tile t15 reveal" aria-label="Performance Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./D B6.jpeg" alt="David performing" loading="lazy">
-                </div>
-            </article>
-
-            <article class="tile t16 reveal" aria-label="Performance Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./D B7.jpeg" alt="David performing" loading="lazy">
-                </div>
-            </article>
-
-            <article class="tile t17 reveal" aria-label="Performance Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./D B8.jpeg" alt="David performing" loading="lazy">
-                </div>
-            </article>
-
-            <article class="tile t18 reveal" aria-label="Performance Photo">
-                <div class="pic-wrap">
-                    <img class="pic" src="./D B9.jpeg" alt="David performing" loading="lazy">
-                </div>
-            </article>
-        </div>
-    </section>
-
-    <!-- SVG Definitions (placed once) -->
-    <svg width="0" height="0" style="position:absolute">
-        <defs>
-            <linearGradient id="halfGrad">
-                <stop offset="50%" stop-color="#ffd166"></stop>
-                <stop offset="50%" stop-color="#333"></stop>
-            </linearGradient>
-        </defs>
-    </svg>
-
-    <script>
-        const overlay = document.getElementById('overlay');
-        const bodyEl = document.body;
-
-        function openLayer(el) { el.classList.add('show'); overlay.classList.add('show'); bodyEl.classList.add('page-open'); }
-        function closeLayers() { document.querySelectorAll('.page.show,.modal.show').forEach(x => x.classList.remove('show')); overlay.classList.remove('show'); bodyEl.classList.remove('page-open'); }
-
-        const showsPage = document.getElementById('showsPage');
-        document.getElementById('openShows').addEventListener('click', e => { e.preventDefault(); openLayer(showsPage); });
-        document.getElementById('closeShows').addEventListener('click', closeLayers);
-
-        const shopPage = document.getElementById('shopPage');
-        document.getElementById('openShop').addEventListener('click', e => { e.preventDefault(); openLayer(shopPage); });
-        document.getElementById('closeShop').addEventListener('click', closeLayers);
-
-        const contactModal = document.getElementById('contactModal');
-        document.getElementById('openContact').addEventListener('click', e => { e.preventDefault(); openLayer(contactModal); });
-        document.getElementById('closeContact').addEventListener('click', closeLayers);
-        document.getElementById('xContact').addEventListener('click', closeLayers);
-
-        const calendarModal = document.getElementById('calendarModal');
-        document.getElementById('openCalendar').addEventListener('click', e => { e.preventDefault(); openLayer(calendarModal); renderEvents(); });
-        document.getElementById('closeCalendar').addEventListener('click', closeLayers);
-        document.getElementById('xCalendar').addEventListener('click', closeLayers);
-
-        overlay.addEventListener('click', closeLayers);
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLayers(); });
-
-        const shows = [
-            { id: 'DNbGpTKRzhJ', date: 'TBA', city: '—', venue: '—', link: 'https://www.instagram.com/reel/DNbGpTKRzhJ/', thumb: './thumbs/DNbGpTKRzhJ.jpg' },
-            { id: 'DHPMztypBsl', date: 'TBA', city: '—', venue: '—', link: 'https://www.instagram.com/reel/DHPMztypBsl/', thumb: './thumbs/DHPMztypBsl.jpg' },
-            { id: 'DEkwPnmRckD', date: 'TBA', city: '—', venue: '—', link: 'https://www.instagram.com/reel/DEkwPnmRckD/', thumb: './thumbs/DEkwPnmRckD.jpg' }
-        ];
-
-        const grid = document.getElementById('showsGrid');
-        grid.innerHTML = shows.map(s => `
-      <article class="card">
-        <a href="${s.link}" target="_blank" rel="noopener">
-          <img class="thumb" src="${s.thumb}" alt="Show ${s.id}" loading="lazy">
+        <a href="https://www.tiktok.com/@dbcomedy14?_t=ZT-8yjyCl2pKnu&_r=1" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.8 3a6.6 6.6 0 0 0 4.9 2.1V8A9.3 9.3 0 0 1 14 6.7v6.7a5.4 5.4 0 1 1-5.4-5.4c.3 0 .7 0 1 .1V10a2.9 2.9 0 1 0 2 2.7V3h1.2Z"/></svg>
         </a>
-        <div class="body">
-          <div class="top">
-            <span class="badge">${s.date || 'TBA'}</span>
-            <span class="badge">${s.city || '—'}</span>
-            <span class="badge">${s.venue || '—'}</span>
+        <a href="https://www.youtube.com/@DBcomedy_14" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12c0 2.1.2 4.2.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.3-1.6.5-3.7.5-5.8 0-2.1-.2-4.2-.5-5.8zM9.5 15.5v-7l6.3 3.5-6.3 3.5z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/david.burrows.975910" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.1c0-6.6-5.4-12-12-12S0 5.5 0 12.1c0 6 4.4 11 10.1 11.9v-8.4H7.1v-3.5h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9v2.3h3.4l-.5 3.5h-2.9v8.4c5.7-.9 10.1-5.9 10.1-11.9z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="about-portrait reveal">
+        <img src="./cowboy.JPG" alt="David Burrows" loading="lazy">
+      </div>
+      <div class="about-copy reveal">
+        <span class="eyebrow">About</span>
+        <h2 class="section-title">Sharp <em>crowd work,</em> clean punchlines.</h2>
+        <p>David Burrows is a stand-up comedian working stages across the tri-state area. The set lives somewhere between razor-fast crowd work, lived-in storytelling, and the kind of one-liner that makes the bouncer laugh too.</p>
+        <p>Bookings range from late-night clubs to college shows to private events — anywhere a room needs to feel like the best night of someone's week.</p>
+        <div class="about-stats">
+          <div>
+            <div class="stat-num">5★</div>
+            <div class="stat-label">Avg. Booking Rating</div>
           </div>
-          <div class="h3">Live Set</div>
-          <div class="meta">Tap to watch the reel</div>
-          <div class="actions">
-            <a class="btn" href="${s.link}" target="_blank" rel="noopener">Watch</a>
-            <a class="btn" style="--a:var(--p-purple);--b:var(--p-blue-2)" href="https://www.instagram.com/anthonymoreno__/" target="_blank" rel="noopener">Book</a>
+          <div>
+            <div class="stat-num">50+</div>
+            <div class="stat-label">Shows Played</div>
           </div>
+          <div>
+            <div class="stat-num">NJ→NY</div>
+            <div class="stat-label">Tri-State Circuit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REEL ===================== -->
+<section id="reel">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Reel</span>
+      <h2 class="section-title">A <em>live set,</em> in his own words.</h2>
+    </div>
+    <div class="reel-wrap reveal">
+      <iframe
+        src="https://www.youtube.com/embed/kEMCeyn6Ehc?rel=0&modestbranding=1&playsinline=1"
+        title="David Burrows — Live Set"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </div>
+    <div class="reel-meta reveal">
+      <span class="live">Live Set</span>
+      <span>Recorded · Tri-State Circuit</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PRAISE ===================== -->
+<section id="praise">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Praise</span>
+      <h2 class="section-title">What <em>bookers</em> say.</h2>
+    </div>
+    <div class="praise-grid">
+      <article class="quote reveal">
+        <p class="quote-text">Crowd loved him — clean, quick, and knows how to work a room perfectly.</p>
+        <div class="quote-attr">
+          <div>
+            <div class="quote-name">Comedy Club Manager</div>
+            <div class="quote-role">NYC Venue</div>
+          </div>
+          <span class="quote-stars" aria-label="5 out of 5">
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+          </span>
         </div>
       </article>
-    `).join('');
 
-        // Enhanced reveal animation with staggered timing
-        const io = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('in');
-                    }, index * 150); // Stagger the animations
-                    io.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
+      <article class="quote reveal">
+        <p class="quote-text">Professional, punctual, and incredibly funny. Booked him again immediately.</p>
+        <div class="quote-attr">
+          <div>
+            <div class="quote-name">Event Producer</div>
+            <div class="quote-role">Private Event</div>
+          </div>
+          <span class="quote-stars" aria-label="5 out of 5">
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+          </span>
+        </div>
+      </article>
 
-        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+      <article class="quote reveal">
+        <p class="quote-text">Students wouldn't stop laughing — best comedian we've had in years.</p>
+        <div class="quote-attr">
+          <div>
+            <div class="quote-name">College Coordinator</div>
+            <div class="quote-role">Campus Show</div>
+          </div>
+          <span class="quote-stars" aria-label="5 out of 5">
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 17.3 5.9 21l1.2-7-5.1-4.9 7-.9L12 1.5l3.1 6.7 7 .9-5.1 4.9 1.2 7z"/></svg>
+          </span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
 
-        // ===== CALENDAR FUNCTIONALITY =====
-        let isLoggedIn = false;
-        let calendarEvents = JSON.parse(localStorage.getItem('calendarEvents') || '[]');
+<!-- ===================== TOUR ===================== -->
+<section id="tour">
+  <div class="wrap">
+    <div class="tour-head reveal">
+      <div>
+        <span class="eyebrow">Tour</span>
+        <h2 class="section-title">Upcoming <em>dates.</em></h2>
+      </div>
+      <div class="tour-actions">
+        <button class="btn-ghost" id="openCalendarFull">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Full Agenda
+        </button>
+        <button class="btn-solid" id="openContactFromTour">Book Show</button>
+      </div>
+    </div>
+    <div class="tour-list reveal" id="tourList"></div>
+  </div>
+</section>
 
-        // Admin password (in production, this should be server-side)
-        const ADMIN_PASSWORD = 'davidanthony';
+<!-- ===================== GALLERY ===================== -->
+<section id="gallery">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">On Stage</span>
+      <h2 class="section-title">Recent <em>nights.</em></h2>
+    </div>
+    <div class="gallery-grid reveal">
+      <div class="gallery-item g1"><img src="./db.png" alt="Stage performance" loading="lazy"></div>
+      <div class="gallery-item g2"><img src="./D B1.jpeg" alt="" loading="lazy"></div>
+      <div class="gallery-item g3"><img src="./D B2.jpeg" alt="" loading="lazy"></div>
+      <div class="gallery-item g4"><img src="./D B3.jpeg" alt="" loading="lazy"></div>
+      <div class="gallery-item g5"><img src="./D B4.jpeg" alt="" loading="lazy"></div>
+      <div class="gallery-item g6"><img src="./D B5.jpeg" alt="" loading="lazy"></div>
+      <div class="gallery-item g7"><img src="./D B6.jpeg" alt="" loading="lazy"></div>
+      <div class="gallery-item g8"><img src="./D B7.jpeg" alt="" loading="lazy"></div>
+      <div class="gallery-item g9"><img src="./coco.JPG" alt="" loading="lazy"></div>
+    </div>
+  </div>
+</section>
 
-        function saveEvents() {
-            localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents));
-        }
+<!-- ===================== BOOK ===================== -->
+<section id="book">
+  <div class="wrap">
+    <span class="eyebrow">Booking</span>
+    <h2 class="section-title">Got a <em>room</em> that needs filling?</h2>
+    <p class="book-lede">Clubs, colleges, corporate, private. Tell me the room and the date — I'll bring the punchlines.</p>
+    <button id="openContactCTA" class="book-cta">
+      Get In Touch
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+</section>
 
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-            return {
-                month: months[date.getMonth()],
-                day: date.getDate()
-            };
-        }
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="foot-brand">D. Burrows</div>
+  <div>© <span id="year"></span> David Burrows · All rights reserved</div>
+</footer>
 
-        function renderEvents() {
-            const container = document.getElementById('calendarEvents');
+<!-- ===================== CONTACT MODAL ===================== -->
+<div id="contactModal" class="modal" role="dialog" aria-modal="true" aria-label="Contact">
+  <div class="modal-card">
+    <button class="modal-close" data-close>✕</button>
+    <h3 class="modal-title">Get In Touch</h3>
+    <a class="c-row" href="sms:+17323951102">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1A19.3 19.3 0 0 1 4.2 10.8 19.8 19.8 0 0 1 1.1 2.2 2 2 0 0 1 3 0h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8l-1.3 1.3a16 16 0 0 0 6.8 6.8l1.3-1.3a2 2 0 0 1 1.8-.6l3 .5A2 2 0 0 1 22 16.9z"/></svg>
+      <div>
+        <div class="c-label">Text</div>
+        <div class="c-value">+1 732 395 1102</div>
+      </div>
+    </a>
+    <a class="c-row" href="mailto:antmoreno1000@gmail.com">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+      <div>
+        <div class="c-label">Email</div>
+        <div class="c-value">antmoreno1000@gmail.com</div>
+      </div>
+    </a>
+    <a class="c-row" href="https://www.instagram.com/anthonymoreno__/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1"/></svg>
+      <div>
+        <div class="c-label">DM</div>
+        <div class="c-value">@anthonymoreno__</div>
+      </div>
+    </a>
+  </div>
+</div>
 
-            if (calendarEvents.length === 0) {
-                container.innerHTML = '<p style="text-align: center; opacity: .7; padding: 40px 0;">No upcoming shows scheduled.</p>';
-                return;
-            }
+<!-- ===================== CALENDAR MODAL ===================== -->
+<div id="calendarModal" class="modal" role="dialog" aria-modal="true" aria-label="Tour Agenda">
+  <div class="modal-card lg">
+    <button class="modal-close" data-close>✕</button>
+    <h3 class="modal-title">Tour Agenda</h3>
 
-            // Sort events by date
-            const sortedEvents = [...calendarEvents].sort((a, b) => new Date(a.date) - new Date(b.date));
+    <div class="cal-toolbar">
+      <div class="cal-nav-btns">
+        <button class="cal-btn arrow" id="calPrev" aria-label="Previous month">‹</button>
+        <button class="cal-btn" id="calToday">Today</button>
+        <button class="cal-btn arrow" id="calNext" aria-label="Next month">›</button>
+        <span class="cal-monthlabel" id="calMonthLabel">—</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <div class="view-toggle">
+          <button id="viewMonth" class="active">Month</button>
+          <button id="viewAgenda">Agenda</button>
+        </div>
+        <button class="cal-btn" id="editBtn">Edit</button>
+      </div>
+    </div>
 
-            container.innerHTML = sortedEvents.map((event, index) => {
-                const { month, day } = formatDate(event.date);
-                return `
-                    <div class="event-item">
-                        <div class="event-date">
-                            <div class="event-month">${month}</div>
-                            <div class="event-day">${day}</div>
-                        </div>
-                        <div class="event-details">
-                            <h4>${event.title}</h4>
-                            <p>${event.location}${event.description ? ' • ' + event.description : ''}</p>
-                        </div>
-                        ${isLoggedIn ? `
-                            <div class="event-actions">
-                                <button class="delete" onclick="deleteEvent(${index})">Delete</button>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-            }).join('');
-        }
+    <div id="loginForm" class="login-form hidden">
+      <h4>Admin Access</h4>
+      <p class="sub">Enter username and password to manage agenda items</p>
+      <input type="text" id="loginUsername" placeholder="Username" autocomplete="username">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <button class="cal-btn" id="loginSubmit" style="background:var(--accent);border-color:var(--accent);color:#fff">Unlock</button>
+      <p id="loginError" style="color:#f0c585;font-size:12px;margin:0;display:none"></p>
+    </div>
 
-        function deleteEvent(index) {
-            if (confirm('Are you sure you want to delete this event?')) {
-                calendarEvents.splice(index, 1);
-                saveEvents();
-                renderEvents();
-            }
-        }
+    <div id="addEventForm" class="add-form hidden">
+      <h4>Add New Agenda Item</h4>
+      <input type="date" id="eventDate" required>
+      <input type="time" id="eventTime" required>
+      <input type="text" id="eventTitle" placeholder="Event title" required>
+      <input type="text" id="eventLocation" placeholder="Location" required>
+      <textarea id="eventDescription" placeholder="Description (optional)"></textarea>
+      <button class="cal-btn" id="addEventBtn" style="background:var(--accent);border-color:var(--accent);color:#fff">Add Event</button>
+    </div>
 
-        // Edit button - show login form
-        document.getElementById('editBtn').addEventListener('click', () => {
-            if (isLoggedIn) {
-                // Already logged in, show add event form
-                document.getElementById('addEventForm').classList.toggle('hidden');
-            } else {
-                // Show login form
-                document.getElementById('loginForm').classList.remove('hidden');
-                document.getElementById('loginError').style.display = 'none';
-            }
-        });
+    <div id="calMonthView">
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-daypanel">
+        <h4 id="calDayLabel">Select a date</h4>
+        <div id="calDayEvents"></div>
+      </div>
+    </div>
 
-        // Login submit
-        const loginSubmit = () => {
-            const password = document.getElementById('loginPassword').value;
-            const errorEl = document.getElementById('loginError');
+    <div id="calAgendaView" class="agenda-list hidden"></div>
+  </div>
+</div>
 
-            if (password === ADMIN_PASSWORD) {
-                isLoggedIn = true;
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('addEventForm').classList.remove('hidden');
-                document.getElementById('editBtn').textContent = 'Add Event';
-                renderEvents();
+<script>
+// ============= MODALS =============
+const body = document.body;
+function openModal(el){ el.classList.add('show'); body.style.overflow='hidden'; }
+function closeModals(){
+  document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show'));
+  body.style.overflow='';
+}
+const contactModal = document.getElementById('contactModal');
+const calendarModal = document.getElementById('calendarModal');
 
-                // Clear form
-                document.getElementById('loginPassword').value = '';
-            } else {
-                errorEl.textContent = 'Incorrect password';
-                errorEl.style.display = 'block';
-            }
-        };
+document.getElementById('openContact').addEventListener('click', e=>{e.preventDefault();openModal(contactModal);});
+document.getElementById('openContactFromTour').addEventListener('click', e=>{e.preventDefault();openModal(contactModal);});
+document.getElementById('openContactCTA').addEventListener('click', e=>{e.preventDefault();openModal(contactModal);});
+document.getElementById('openContactHero').addEventListener('click', e=>{e.preventDefault();openModal(contactModal);});
+document.getElementById('openCalendarFull').addEventListener('click', e=>{e.preventDefault();openModal(calendarModal);renderEvents();});
+document.getElementById('openCalendarHero').addEventListener('click', e=>{e.preventDefault();openModal(calendarModal);renderEvents();});
 
-        document.getElementById('loginSubmit').addEventListener('click', loginSubmit);
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',closeModals));
+document.querySelectorAll('.modal').forEach(m=>{
+  m.addEventListener('click',e=>{ if(e.target===m) closeModals(); });
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModals(); });
 
-        // Allow Enter key to submit password
-        document.getElementById('loginPassword').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                loginSubmit();
-            }
-        });
+// ============= REVEAL =============
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('in'), i*80);
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:.1,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-        // Add event submit
-        document.getElementById('addEventBtn').addEventListener('click', () => {
-            const date = document.getElementById('eventDate').value;
-            const title = document.getElementById('eventTitle').value;
-            const location = document.getElementById('eventLocation').value;
-            const description = document.getElementById('eventDescription').value;
+// ============= YEAR =============
+document.getElementById('year').textContent = new Date().getFullYear();
 
-            if (!date || !title || !location) {
-                alert('Please fill in all required fields');
-                return;
-            }
+// ============= CALENDAR =============
+let isLoggedIn = false;
+let calendarEvents = JSON.parse(localStorage.getItem('calendarEvents') || 'null');
+const ADMIN_USERNAME = 'admin';
+const ADMIN_PASSWORD = 'davidanthony';
 
-            const newEvent = {
-                date,
-                title,
-                location,
-                description
-            };
+if(!calendarEvents || calendarEvents.length===0){
+  calendarEvents = [
+    {date:'2026-05-15', time:'20:00', title:'Comedy Night', location:'The Laugh Factory, NYC', description:'Main room set'},
+    {date:'2026-05-22', time:'21:00', title:'Stand-Up Special', location:'Brooklyn Bowl', description:'Late show'},
+    {date:'2026-06-01', time:'19:00', title:'College Show', location:'Rutgers University', description:'Campus theater'},
+  ];
+  saveEvents();
+}
+function saveEvents(){ localStorage.setItem('calendarEvents', JSON.stringify(calendarEvents)); }
+function eventTimeLabel(timeStr){
+  if(!timeStr) return '';
+  const [h,m] = timeStr.split(':').map(Number);
+  const d = new Date();
+  d.setHours(h||0,m||0,0,0);
+  return d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+}
 
-            calendarEvents.push(newEvent);
-            saveEvents();
-            renderEvents();
+// Month / agenda views
+const MONTH_NAMES=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const SHORT_MONTHS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+let viewYear, viewMonth, selectedKey=null;
+(function(){ const t=new Date(); viewYear=t.getFullYear(); viewMonth=t.getMonth(); selectedKey=isoKey(t); })();
 
-            // Clear form
-            document.getElementById('eventDate').value = '';
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventLocation').value = '';
-            document.getElementById('eventDescription').value = '';
+function isoKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function escapeHtml(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function eventsByDay(){ const m={}; calendarEvents.forEach(e=>(m[e.date]||=[]).push(e)); return m; }
 
-            // Hide form
-            document.getElementById('addEventForm').classList.add('hidden');
-        });
+function renderMonth(){
+  const grid=document.getElementById('calGrid');
+  const label=document.getElementById('calMonthLabel');
+  if(!grid||!label) return;
+  label.textContent=`${MONTH_NAMES[viewMonth]} ${viewYear}`;
+  const first=new Date(viewYear,viewMonth,1);
+  const startOffset=first.getDay();
+  const daysInMonth=new Date(viewYear,viewMonth+1,0).getDate();
+  const daysInPrev=new Date(viewYear,viewMonth,0).getDate();
+  const todayKey=isoKey(new Date());
+  const evMap=eventsByDay();
+  let html=DOW.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=0;i<42;i++){
+    let cellDate, otherMonth=false;
+    if(i<startOffset){ cellDate=new Date(viewYear,viewMonth-1,daysInPrev-(startOffset-1-i)); otherMonth=true; }
+    else if(i>=startOffset+daysInMonth){ cellDate=new Date(viewYear,viewMonth+1,i-startOffset-daysInMonth+1); otherMonth=true; }
+    else cellDate=new Date(viewYear,viewMonth,i-startOffset+1);
+    const key=isoKey(cellDate);
+    const dayEvts=evMap[key]||[];
+    const cls=['cal-day'];
+    if(otherMonth) cls.push('other-month');
+    if(key===todayKey) cls.push('today');
+    if(key===selectedKey) cls.push('selected');
+    const visible=dayEvts.slice(0,2).map(e=>`<div class="cal-evt" title="${escapeHtml(e.title)}">${escapeHtml(e.title)}</div>`).join('');
+    const extra=dayEvts.length>2?`<div class="cal-evt more">+${dayEvts.length-2} more</div>`:'';
+    html+=`<div class="${cls.join(' ')}" data-key="${key}" role="button" tabindex="0"><span class="cal-daynum">${cellDate.getDate()}</span>${visible}${extra}</div>`;
+  }
+  grid.innerHTML=html;
+  grid.querySelectorAll('.cal-day').forEach(el=>{
+    el.addEventListener('click',()=>selectDay(el.dataset.key));
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();selectDay(el.dataset.key);} });
+  });
+  renderDayPanel();
+}
+function selectDay(key){
+  selectedKey=key;
+  const [y,m]=key.split('-').map(Number);
+  if(y!==viewYear || (m-1)!==viewMonth){ viewYear=y; viewMonth=m-1; }
+  renderMonth();
+  const dateInput=document.getElementById('eventDate');
+  if(dateInput && isLoggedIn) dateInput.value=key;
+}
+function renderDayPanel(){
+  const label=document.getElementById('calDayLabel');
+  const list=document.getElementById('calDayEvents');
+  if(!label||!list) return;
+  if(!selectedKey){ label.textContent='Select a date'; list.innerHTML=''; return; }
+  const [y,m,d]=selectedKey.split('-').map(Number);
+  const dt=new Date(y,m-1,d);
+  label.textContent=dt.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const evts=eventsByDay()[selectedKey]||[];
+  if(evts.length===0){ list.innerHTML='<p class="empty">No events on this day.</p>'; return; }
+  list.innerHTML=evts.map(e=>{
+    const realIndex=calendarEvents.indexOf(e);
+    const timeLabel = eventTimeLabel(e.time);
+    return `<div class="day-evt">
+      <div>
+        <h5>${escapeHtml(e.title)}</h5>
+        <p>${timeLabel?`${escapeHtml(timeLabel)} · `:''}${escapeHtml(e.location)}${e.description?' · '+escapeHtml(e.description):''}</p>
+      </div>
+      ${isLoggedIn?`<button class="day-del" onclick="deleteEvent(${realIndex})">Delete</button>`:''}
+    </div>`;
+  }).join('');
+}
 
-        // Add some default events if none exist
-        if (calendarEvents.length === 0) {
-            calendarEvents = [
-                {
-                    date: '2026-04-15',
-                    title: 'Comedy Night at The Laugh Factory',
-                    location: 'New York, NY',
-                    description: '8 PM Show'
-                },
-                {
-                    date: '2026-04-22',
-                    title: 'Stand-Up Special',
-                    location: 'Brooklyn Bowl',
-                    description: '9 PM Show'
-                },
-                {
-                    date: '2026-05-01',
-                    title: 'College Show',
-                    location: 'Rutgers University',
-                    description: '7 PM Show'
-                }
-            ];
-            saveEvents();
-        }
-    </script>
+function renderAgenda(){
+  const list=document.getElementById('calAgendaView');
+  if(!list) return;
+  if(calendarEvents.length===0){
+    list.innerHTML='<p class="empty" style="text-align:center;padding:40px">No upcoming events scheduled.</p>';
+    return;
+  }
+  const sorted=[...calendarEvents].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  list.innerHTML=sorted.map(e=>{
+    const d=new Date(e.date);
+    const idx=calendarEvents.indexOf(e);
+    const timeLabel = eventTimeLabel(e.time);
+    return `<div class="agenda-item">
+      <div class="agenda-date">
+        <div class="m">${SHORT_MONTHS[d.getMonth()]}</div>
+        <div class="d">${d.getDate()}</div>
+      </div>
+      <div class="agenda-info">
+        <h5>${escapeHtml(e.title)}</h5>
+        <p>${timeLabel?`${escapeHtml(timeLabel)} · `:''}${escapeHtml(e.location)}${e.description?' · '+escapeHtml(e.description):''}</p>
+      </div>
+      ${isLoggedIn?`<button class="day-del" onclick="deleteEvent(${idx})">Del</button>`:''}
+    </div>`;
+  }).join('');
+}
+
+function renderEvents(){ renderMonth(); renderAgenda(); renderTourList(); }
+
+// Toolbar
+document.getElementById('calPrev').addEventListener('click',()=>{ viewMonth--; if(viewMonth<0){viewMonth=11;viewYear--;} renderMonth(); });
+document.getElementById('calNext').addEventListener('click',()=>{ viewMonth++; if(viewMonth>11){viewMonth=0;viewYear++;} renderMonth(); });
+document.getElementById('calToday').addEventListener('click',()=>{ const t=new Date(); viewYear=t.getFullYear(); viewMonth=t.getMonth(); selectedKey=isoKey(t); renderMonth(); });
+
+const viewMonthBtn=document.getElementById('viewMonth');
+const viewAgendaBtn=document.getElementById('viewAgenda');
+const monthViewEl=document.getElementById('calMonthView');
+const agendaViewEl=document.getElementById('calAgendaView');
+function setView(w){
+  [viewMonthBtn,viewAgendaBtn].forEach(b=>b.classList.remove('active'));
+  [monthViewEl,agendaViewEl].forEach(e=>e.classList.add('hidden'));
+  if(w==='month'){ viewMonthBtn.classList.add('active'); monthViewEl.classList.remove('hidden'); }
+  if(w==='agenda'){ viewAgendaBtn.classList.add('active'); agendaViewEl.classList.remove('hidden'); renderAgenda(); }
+}
+viewMonthBtn.addEventListener('click',()=>setView('month'));
+viewAgendaBtn.addEventListener('click',()=>setView('agenda'));
+
+window.deleteEvent=function(i){ if(confirm('Delete this event?')){ calendarEvents.splice(i,1); saveEvents(); renderEvents(); } };
+
+// Login
+document.getElementById('editBtn').addEventListener('click',()=>{
+  if(isLoggedIn){ document.getElementById('addEventForm').classList.toggle('hidden'); }
+  else{ document.getElementById('loginForm').classList.remove('hidden'); document.getElementById('loginError').style.display='none'; }
+});
+function loginSubmit(){
+  const user=document.getElementById('loginUsername').value.trim().toLowerCase();
+  const pw=document.getElementById('loginPassword').value;
+  const err=document.getElementById('loginError');
+  if(user===ADMIN_USERNAME && pw===ADMIN_PASSWORD){
+    isLoggedIn=true;
+    document.getElementById('loginForm').classList.add('hidden');
+    document.getElementById('addEventForm').classList.remove('hidden');
+    document.getElementById('editBtn').textContent='Add Event';
+    renderEvents();
+    document.getElementById('loginUsername').value='';
+    document.getElementById('loginPassword').value='';
+  }else{ err.textContent='Incorrect username or password'; err.style.display='block'; }
+}
+document.getElementById('loginSubmit').addEventListener('click',loginSubmit);
+document.getElementById('loginUsername').addEventListener('keypress',e=>{ if(e.key==='Enter') loginSubmit(); });
+document.getElementById('loginPassword').addEventListener('keypress',e=>{ if(e.key==='Enter') loginSubmit(); });
+
+// Add event
+document.getElementById('addEventBtn').addEventListener('click',()=>{
+  const date=document.getElementById('eventDate').value;
+  const time=document.getElementById('eventTime').value;
+  const title=document.getElementById('eventTitle').value;
+  const location=document.getElementById('eventLocation').value;
+  const description=document.getElementById('eventDescription').value;
+  if(!date||!time||!title||!location){ alert('Please fill in date, time, title, and location.'); return; }
+  calendarEvents.push({date,time,title,location,description});
+  saveEvents();
+  renderEvents();
+  ['eventDate','eventTime','eventTitle','eventLocation','eventDescription'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('addEventForm').classList.add('hidden');
+});
+
+// ============= TOUR LIST (homepage) =============
+function renderTourList(){
+  const el=document.getElementById('tourList');
+  if(!el) return;
+  const upcoming=calendarEvents
+    .filter(e=>new Date(e.date)>=new Date(new Date().toDateString()))
+    .sort((a,b)=>new Date(a.date)-new Date(b.date))
+    .slice(0,6);
+  if(upcoming.length===0){
+    el.innerHTML='<div class="empty-tour">New dates announced soon — check back, or get on the books for one of your own.</div>';
+    return;
+  }
+  el.innerHTML=upcoming.map(e=>{
+    const d=new Date(e.date);
+    return `<div class="tour-row">
+      <div class="tour-date">
+        <div class="day">${d.getDate()}</div>
+        <div class="month">${SHORT_MONTHS[d.getMonth()]} ${d.getFullYear()}</div>
+      </div>
+      <div class="tour-info">
+        <h3>${escapeHtml(e.title)}</h3>
+        <div class="where">${e.time?`${escapeHtml(eventTimeLabel(e.time))} · `:''}${escapeHtml(e.location)}${e.description?' · '+escapeHtml(e.description):''}</div>
+      </div>
+      <button class="tour-go" onclick="document.getElementById('openCalendarFull').click()">
+        Details <span class="arrow">→</span>
+      </button>
+    </div>`;
+  }).join('');
+}
+renderTourList();
+</script>
 </body>
-
 </html>

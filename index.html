@@ -219,10 +219,19 @@ a{color:inherit}
     gap:14px;
   }
   .hero-tag{font-size:15px;max-width:100%}
-  .hero-actions{gap:7px;flex-wrap:wrap}
-  .hero-action{padding:9px 13px;font-size:11px;letter-spacing:.15em}
+  .hero-actions{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:5px;
+  }
+  .hero-action{
+    padding:9px 4px;
+    font-size:9.5px;
+    letter-spacing:.08em;
+    justify-content:center;
+  }
   .hero-action.primary{
-    width:100%;
+    grid-column:1 / -1;
     justify-content:center;
     font-size:11px;
     letter-spacing:.15em;

@@ -220,9 +220,17 @@ a{color:inherit}
   }
   .hero-tag{font-size:15px;max-width:100%}
   .hero-actions{gap:7px;flex-wrap:wrap}
-  .hero-action{padding:9px 13px;font-size:10px;letter-spacing:.1em}
+  .hero-action{padding:9px 13px;font-size:11px;letter-spacing:.15em}
+  .hero-action.primary{
+    width:100%;
+    justify-content:center;
+    font-size:11px;
+    letter-spacing:.15em;
+    padding:13px 18px;
+    animation:ctaPulse 2.8s ease-in-out infinite;
+  }
   .scroll-hint{display:none}
-  .socials{gap:10px}
+  .socials{gap:10px;justify-content:center}
   .socials a{width:30px;height:30px}
 }
 
